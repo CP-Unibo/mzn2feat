@@ -1,0 +1,93 @@
+--- xcsp-parser/XMLParser.hh	2011-03-23 18:41:43.523196275 +0100
++++ xcsp-parser-orig/XMLParser.hh	2008-06-09 10:41:42.000000000 +0200
+@@ -1196,9 +1196,8 @@
+ 
+ 	  const vector<string> &keyOrder=*conventionalKeyOrder;
+ 
+-	  unsigned i;
+-	  unsigned ubase(base);
+-	  for(i=0;i<stack.size()-ubase && i<keyOrder.size();++i)
++	  int i;
++	  for(i=0;i<stack.size()-base && i<keyOrder.size();++i)
+ 	  {
+ 	    if (stack[base+i]->getType()!=SYMB_NIL)
+ 	      dict->setArg(keyOrder[i],stack[base+i]);
+@@ -1573,7 +1572,7 @@
+ 	if (reference.length()>7 && reference.substr(0,7)=="global:")
+ 	{
+ 	  // global constraints are case insensitive
+-	  for(unsigned i=0;i<reference.size();++i)
++	  for(int i=0;i<reference.size();++i)
+ 	    reference[i]=tolower(reference[i]);
+ 	}
+ 
+@@ -1656,7 +1655,7 @@
+     private:
+       ASTList scopeList;
+       VariableInfo scopeInfo;
+-      unsigned initialOperandStackSize;
++      int initialOperandStackSize;
+     };
+ 
+     class ExtensionTagAction : public TagAction
+@@ -1915,16 +1914,6 @@
+ 
+       weightedSum_dictOrder.push_back("coef");
+       weightedSum_dictOrder.push_back("var");
+-
+-      disjunctive_dictOrder.push_back("origin");
+-      disjunctive_dictOrder.push_back("duration");
+-
+-      glob_card_dictOrder.push_back("val");
+-      glob_card_dictOrder.push_back("noccurrence");
+-
+-      diffn_dictOrder.push_back("ori");
+-      diffn_dictOrder.push_back("siz");
+-      diffn_dictOrder.push_back("end");
+     }
+ 
+     ~XMLParser()
+@@ -1987,24 +1976,6 @@
+ 	SymbolInfo(5,GlobalConstraintType,&weightedSum_dictOrder);
+       symbolDict["global:element"]=
+ 	SymbolInfo(6,GlobalConstraintType);
+-      symbolDict["global:lexless"]=
+-	SymbolInfo(7,GlobalConstraintType);
+-      symbolDict["global:lexlesseq"]=
+-	SymbolInfo(8,GlobalConstraintType);
+-      symbolDict["global:disjunctive"]=
+-	SymbolInfo(9,GlobalConstraintType,&disjunctive_dictOrder);
+-      symbolDict["global:global_cardinality"]=
+-	SymbolInfo(10,GlobalConstraintType,&glob_card_dictOrder);
+-      symbolDict["global:among"]=
+-	SymbolInfo(11,GlobalConstraintType);
+-      symbolDict["global:atleast"]=
+-	SymbolInfo(12,GlobalConstraintType);
+-      symbolDict["global:atmost"]=
+-	SymbolInfo(13,GlobalConstraintType);
+-      symbolDict["global:diffn"]=
+-	SymbolInfo(14,GlobalConstraintType,&diffn_dictOrder);
+-      symbolDict["global:not_all_equal"]=
+-	SymbolInfo(15,GlobalConstraintType);
+ 
+       for(int i=0;i<UndefinedType;++i)
+ 	nextId[i]=0;
+@@ -2309,7 +2280,7 @@
+ 
+     void clearOperandStack()
+     {
+-      for(unsigned i=0;i<operandStack.size();++i)
++      for(int i=0;i<operandStack.size();++i)
+ 	delete operandStack[i];
+ 
+       operandStack.clear();
+@@ -2348,8 +2319,7 @@
+ 
+     // ??? temporary solution
+     // conventional order for some global constraints
+-    vector<string> cumulative_dictOrder,weightedSum_dictOrder,
+-       disjunctive_dictOrder,glob_card_dictOrder,diffn_dictOrder;
++    vector<string> cumulative_dictOrder,weightedSum_dictOrder;
+   }; // class XMLParser
+ 
+ } // namespace

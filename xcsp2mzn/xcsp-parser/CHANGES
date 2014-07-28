@@ -1,0 +1,107 @@
+This file details the changes from version 0.05 of the parser (for the
+XCSP 2.0 format) to version 1.0.0 (for format XCSP 2.1)
+
+A) The parser is now based on the libxml2 library which is probably
+   installed on more systems than Xerces-C and that uses UTF8 instead
+   of UTF16.
+
+   Support for the Xerces-C library is currently unavailable but may
+   come back one day.
+
+   To create a parser object, you just have to write
+
+   #include "XMLParser_libxml2.hh"
+
+   XMLParser_libxml2<> parser(cb);
+
+   where cb is an object encapsulating the callback methods used to
+   transmit information to your solver (you have to write your own
+   code).  See the file C++/include/CSPParserCallback.hh for a
+   description of the methods in the callback class.
+
+B) The signature of the callback beginRelation was changed. The last
+   parameter is no more a boolean but an enumeration in order to add
+   support for soft relations (WCSP)
+
+   void beginRelation(const string & name, int idRel,
+				int arity, int nbTuples, RelType relType)
+
+   relType can be
+
+   REL_SUPPORT:   hard constraint, tuples are supports
+   REL_CONFLICT:  hard constraint, tuples are conflicts
+   REL_SOFT:      soft constraint, each tuple has a weight (WCSP only)
+
+C) Since global constraints use more sophisticated data structures, the
+   callback for defining constraints has been changed to benefit from
+   these (the old callbacks couldn't cope with all possible cases)
+
+   the beginConstraint() callback now has an extra parameter which
+   represents the list of variables in the constraint scope (type
+   ASTList). As a consequence, the callback addVariableToConstraint
+   was removed.
+
+   Parameters of a constraint are now passed as a single parameter to
+   the callback void constraintParameters(const ASTList &args). args
+   is the list of parameters passed to the constraint. args.size() is
+   the number of parameters and args[i] is the i-th parameter
+   (starting from 0).
+
+D) The polymorphic type AST is now more widely used in the parser. AST
+   stands for Abtract Syntax Tree and this type is used to represent
+   an expression as a tree of AST nodes
+
+   The main subclasses of type AST are
+
+   ASTVar: contains a representation of a CSP variable
+
+   ASTInteger: contains an integer value
+
+   ASTList: contains a list of (hetergoneous) elements
+
+   ASTDict: contains a dictionnary of elements
+
+   All these types are designed to be handled through a polymorphic
+   reference:
+
+   const AST &n;
+
+   You may use
+
+   n.isVar() to check if n is an ASTVar
+   n.isInteger() to check if n is an ASTInteger
+   n.isList() to check if n is an ASTList
+   n.isDict() to check if n is an ASTDict
+
+   - when n.isVar() is true, you can use
+
+     n.getVarName() to get the variable name (as a const string)
+     n.getVarId() to get the identifier assigned by the parser to the variable
+   
+   - when n.isInteger() is true, you can use
+
+     n.getInteger() to obtain the value of this ASTInteger
+
+   - when n.isList() is true, you can use
+
+     n.size() to get the number of elements in the list
+
+     n[i] to get a reference to the i-th element (counting from
+     0). This reference if of type const AST &.
+
+   - when n.isDict() is true, you can use
+
+     n.size() to get the number of <key,value> pairs in the dictionnary
+
+     n.hasKey("key") to check if this dictionnary contains the key "key"
+
+     n["key"] to get a reference to the element having key "key". This
+     reference if of type const AST &. The key must exists in the
+     dictionnary or an exception is thrown.
+
+   See examples/C++/example.cc for a practical use of these types.
+
+E) C++ headers were renamed to .hh
+
+F) In the C interface, the callback addVariableToConstraint was
+   renamed to addVariableToScope

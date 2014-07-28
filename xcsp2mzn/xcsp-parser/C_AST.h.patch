@@ -1,0 +1,29 @@
+--- xcsp-parser/C_AST.h	2011-03-23 17:26:25.706984722 +0100
++++ xcsp-parser-orig/C_AST.h	2008-04-30 09:44:21.000000000 +0200
+@@ -76,7 +76,7 @@
+ {
+   NodeType type;
+   int nbarg;
+-  C_AST **args;
++  C_AST *args[];
+ } C_AST_FxNode;
+ 
+ /*
+@@ -87,7 +87,7 @@
+ {
+   NodeType type;
+   int size; /* number of items in the list */
+-  C_AST **items;
++  C_AST *items[];
+ } C_AST_ListNode;
+ 
+ /*
+@@ -108,7 +108,7 @@
+ {
+   NodeType type;
+   int size; /* number of items in the dictionary */
+-  C_AST_DictEntry *items;
++  C_AST_DictEntry items[];
+ } C_AST_DictNode;
+ 
+ 

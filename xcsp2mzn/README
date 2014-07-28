@@ -1,0 +1,37 @@
+The XCSP converter to MiniZinc was developed by Jacopo Mauro (University of 
+Bologna / Lab. Focus INRIA).
+
+The installation guide was provided by the MiniZinc.org team and tested on a 
+64-bit machine running Ubuntu 12.04.
+
+Prerequisites
+=============
+
++ GNOME XML library (libxml2-dev) 
+	sudo apt-get install libxml++2.6-dev
+
+
+Installation guide
+==================
+
+Unpack xcsp2mzn.zip by
+	
+	unzip xcsp2mzn.zip
+
+The XCSP converter is then unpacked in the sub-folder xcsp2mzn. Move into this 
+sub-folder. This sub-folder already contains an executable called xcsp2mzn. 
+If the executable won't run then you need to rebuild it by
+	
+	make clean
+
+and then
+	
+	make
+
+It then creates the executable. In order to convert XCSP file run
+
+	./xcsp2mzn <XCSP file>
+
+The MiniZinc model is then printed to stdout.
+
+Have fun!

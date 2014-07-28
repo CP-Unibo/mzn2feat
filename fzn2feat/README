@@ -1,0 +1,43 @@
+The FlatZinc features extractor fzn2feat was developed by Roberto Amadini 
+(University of Bologna).
+
+The installation guide was provided by the MiniZinc.org team and tested on a 
+64-bit machine running Ubuntu 12.04.
+
+Prerequisites
+=============
+
++ Flex library
+	sudo apt-get install flex
++ Bison library
+	sudo apt-get install bison
+
+
+Installation guide
+==================
+
+Unpack fzn2feat.zip by
+	
+	unzip fzn2feat.zip
+
+The extractor is then unpacked in the sub-folder fzn2feat. Move into this 
+sub-folder. This sub-folder already contains an executable called fzn2feat. 
+If the executable won't run then you need to rebuild it by
+	
+	make clean
+
+and then
+	
+	make
+
+It then creates the executable. In order to extract features from a FlatZinc 
+file run
+
+	./fzn2feat <FlatZinc file> [output]
+
+where output can be either 'csv', 'dict', or 'pp' (see mzn2feat -o).
+The corresponding features vector is then printed to stdout as specified by 
+the optional output parameter (if not specified, the default value is 'csv').
+
+
+Have fun!

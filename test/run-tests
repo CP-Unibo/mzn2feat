@@ -1,0 +1,73 @@
+#! /bin/bash
+# Runs all the tests of the folder.
+
+
+TEST_DIR=$MZN2FEAT_HOME'/test'
+
+echo '=== Processing FlatZinc instances ==='
+for i in `ls $TEST_DIR/fzn/*.fzn`
+do
+  echo '--- Extracting features from '$i' ---'
+  mzn2feat -i $i 
+  ret=$?
+  if 
+    [ $ret -ne 0 ]
+  then
+    echo 'Unexpected error for instance '$i'!!!'
+    exit $ret
+  fi
+done
+
+echo -e '\n=== Processing MiniZinc instances (without .dzn) ==='
+cd $TEST_DIR/mzn
+for i in `ls *.mzn`
+do
+  echo '--- Extracting features from '$i' ---'
+  mzn2feat -i $i
+  if 
+    [ $? -ne 0 ]
+  then
+    echo 'Unexpected error for instance '$i'!!!'
+    exit $ret
+  fi
+done
+
+echo -e '\n=== Processing MiniZinc instances (with .dzn) ==='
+cd $TEST_DIR/dzn
+for i in `ls *.mzn`
+do
+  dzn_dir=`echo $i | awk -F"." '{print $1}'`
+  for d in `ls $dzn_dir`
+  do
+    echo '--- Extracting features from '$i', '$d' ---'
+    mzn2feat -i $i -d $dzn_dir/$d
+    if 
+      [ $? -ne 0 ]
+    then
+      echo 'Unexpected error for instance '$i', '$d'!!!'
+      exit $ret
+    fi
+  done
+done
+
+if 
+  [ "$1" != "--no-xcsp" ]
+then
+  echo -e '\n=== Processing XCSP instances ==='
+  for i in `ls $TEST_DIR/xcsp/*.xml`
+  do
+    echo '--- Extracting features from '$i' ---'
+    mzn2feat -i $i
+    ret=$?
+    if 
+      [ $ret -ne 0 ]
+    then
+      echo 'Unexpected error for instance '$i'!!!'
+      exit $ret
+    fi
+  done
+fi
+
+cd $PWD
+echo -e '\n=== Processed all the instances ==='
+
