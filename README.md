@@ -1,7 +1,7 @@
 mzn2feat
 ========
 
-The features extractor tool mzn2feat-1.0 was mainly developed by Roberto 
+The features extractor tool mzn2feat was mainly developed by Roberto 
 Amadini (University of Bologna / Lab. Focus INRIA). Jacopo Mauro (University 
 of Bologna / Lab. Focus INRIA) developed the compiler xcsp2mzn.
 
@@ -15,7 +15,7 @@ redefinitions of a given solver.
 
 Apart from the implementation details, the main differences between the actual 
 and the original version of mzn2feat regard the set of features set that 
-mzn2feat-1.0 can extract. Indeed, the current version does not compute graph 
+mzn2feat can extract. Indeed, the current version does not compute graph 
 features (since this process could be very time/space consuming), solver 
 specific features (like particular global redefinitions) and dynamic features 
 (to decouple mzn2feat from a particular solver and from the given machine on 
@@ -68,23 +68,19 @@ Some of the main requirements are:
 INSTALLATION
 ============
 
-1. Decompress the package: 
-    
-      $ tar zxf mzn2feat-1.0.tar.bz2
+1. Move into the mzn2feat folder and run the installer:
 
-2. Move into the resulting mzn2feat-1.0 folder and run the installer:
-
-      mzn2feat-1.0$ ./install.sh [--no-xcsp]
+      mzn2feat$ ./install.sh [--no-xcsp]
     
    Note that setting the option --no-xcsp avoids to install the xcsp2mzn 
    converter (e.g., if you don't want / cannot install the XML libraries).
    
-3. Add/modify the environment variables MZN2FEAT_HOME and PATH:
+2. Add/modify the environment variables MZN2FEAT_HOME and PATH:
 
       MZN2FEAT_HOME must point to your <installdir>
       PATH must be extended to include <installdir>/bin
       
-   where <installdir> is the directory in which the package was decompressed.
+   where <installdir> is the directory mzn2feat.
    For instance, bash users would add the following lines to .bashrc file:
 
       $ export MZN2FEAT_HOME="<installdir>"
@@ -125,13 +121,13 @@ TESTING
 =======
 
 Once successfully installed the tool, it is possible to test the samples 
-included in mzn2feat-1.0/test folder. One can do it manually, for instance:
+included in mzn2feat/test folder. One can do it manually, for instance:
 
-      mzn2feat-1.0/test$ mzn2feat -i zebra.mzn -o pp
+      mzn2feat/test$ mzn2feat -i zebra.mzn -o pp
 
 or, alternatively, is possible to run all the tests of the folder by running:
 
-      mzn2feat-1.0/test$ ./run-tests [--no-xcsp]
+      mzn2feat/test$ ./run-tests [--no-xcsp]
       
 where the option --no-xcsp avoids to test the XCSP instances in test/xcsp.
 
