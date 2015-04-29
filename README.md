@@ -8,7 +8,7 @@ xcsp2mzn. Note that this version is more a collection of scripts rather than a
 standalone tool. It was designed for internal use only, it is not portable at 
 all without user intervention. It implements the feature extractor of [1, 2] 
 and it is part of the code available at: www.cs.unibo.it/~amadini/sac_2014.zip
-
+This version of mzn2feat is the one used in [3].
 
 FURTHER INFORMATION
 ===================
@@ -28,3 +28,6 @@ REFERENCES
 
 [2] R. Amadini, M. Gabbrielli, and J. Mauro. An Enhanced Features Extractor for 
     a Portfolio of Constraint Solvers. In SAC, 2014.
+
+[3] R. Amadini, M. Gabbrielli, and J. Mauro. SUNNY: a Lazy Portfolio Approach 
+    for Constraint Solving 2013. In ICLP, 2014.
