@@ -1,5 +1,5 @@
-mzn2feat
-========
+mzn2feat 1.0
+============
 
 The features extractor tool mzn2feat was mainly developed by Roberto 
 Amadini (University of Bologna / Lab. Focus INRIA). Jacopo Mauro (University 
@@ -8,14 +8,14 @@ of Bologna / Lab. Focus INRIA) developed the compiler xcsp2mzn.
 The tool allows to extract an extensive set of 95 features from a Constraint 
 (Satisfaction/Optimization) Problem defined in possibly different modelling 
 languages: MiniZinc, FlatZinc or XCSP.
-It is essentially a new version of the mzn2feat tool described in [1][2], 
+It is essentially a new version of mzn2feat-0.1 extractor described in [1][2], 
 designed to be more portable, light, flexible, and independent from the 
 particular machine on which it is run as well as from the specific global 
-redefinitions of a given solver.
+redefinitions of a given solver. This version of mzn2feat was used in [4][5][6].
 
-Apart from the implementation details, the main differences between the actual 
-and the original version of mzn2feat regard the set of features set that 
-mzn2feat can extract. Indeed, the current version does not compute graph 
+Apart from the implementation details, the main differences between 
+mzn2feat-0.1 and mzn2feat-1.0 regard the set of features set that 
+mzn2feat-1.0 can extract. Indeed, the current version does not compute graph 
 features (since this process could be very time/space consuming), solver 
 specific features (like particular global redefinitions) and dynamic features 
 (to decouple mzn2feat from a particular solver and from the given machine on 
@@ -154,3 +154,11 @@ REFERENCES
   [3] M. Morara, J. Mauro, and M. Gabbrielli. Solving XCSP problems by using 
       Gecode. In CILC, 2011.
       
+  [4] R. Amadini, and Peter J. Stuckey. Sequential Time Splitting and Bounds 
+      Communication for a Portfolio of Optimization Solvers. In CP, 2014.
+      
+  [5] R. Amadini, M. Gabbrielli, and J. Mauro. SUNNY-CP: a Sequential CP 
+      Portfolio Solver. In SAC, 2015.
+
+  [6] R. Amadini, M. Gabbrielli, and J. Mauro. A Multicore Tool for Constraint 
+      Solving. In IJCAI, 2015.
