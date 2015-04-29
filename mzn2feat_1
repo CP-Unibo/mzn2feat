@@ -1,0 +1,143 @@
+#!/bin/bash
+
+# Extracts all the static and dynamic features except the total time for a given 
+# MiniZinc instance.
+
+MZNLIB='/home/phd-students/amadini/new/solvers/gecode-3.7.3/gecode/flatzinc/mznlib'
+
+TMP='/home/phd-students/amadini/tmp2_'$HOSTNAME
+OUT='/home/phd-students/amadini/out2_'$HOSTNAME
+ERR='/home/phd-students/amadini/err2_'$HOSTNAME
+FZN='/home/phd-students/amadini/feat_'$HOSTNAME.fzn
+EXIT=0
+TO_MZN2FZN=900
+TO_GECODE=5
+TO_SFEAT=900
+MZN=$1
+DZN=$2
+MZN2FZN="mzn2fzn -I $MZNLIB $MZN $DZN -o $FZN"
+FZ_GECODE="fz -s -time 2000 $FZN"
+SFEAT='fzn2feat'
+BACKUP_DIR='/public/xcsp_instances/backup_fzn'
+FZN_TIMES=$BACKUP_DIR/fzn_times
+# FIXME: Half of virtual memory.
+ULIM=975870
+ulimit -v $ULIM
+
+if
+  [ -z $DZN ]
+then
+  data=NODATA
+else
+  data=`basename $DZN`
+fi
+name=`basename $MZN`"_AND_"$data".fzn"
+if
+  [[ "$NOT_REPROCESS" && -s "$BACKUP_DIR/$name" ]]
+then
+  fzn_time=`cat $FZN_TIMES | grep "$name" | awk -F"|" '{print $2}'`
+  cp $BACKUP_DIR/$name $FZN
+else
+  cd `dirname $MZN`
+  time -p (timeout $TO_MZN2FZN $MZN2FZN 1>/dev/null 2>$ERR) 2>$TMP
+  ret=$?
+  cd - 1> /dev/null
+  if 
+    [ $ret -ne 0 ]
+  then
+    rm $TMP
+    rm $FZN
+    if
+      [ $ret -eq 124 ]
+    then
+      # If time-out expires.
+      echo "mzn2fzn timeout!" 1>&2
+      cat $ERR 1>&2
+      rm $ERR
+      exit 1
+    else
+      echo "mzn2fzn error!" 1>&2
+      cat $ERR 1>&2
+      rm $ERR
+      exit 2
+    fi
+  fi
+  cp $FZN $BACKUP_DIR/$name
+  fzn_time=`cat $TMP | awk -v s=0.0 'NR > 1 {s += $2} END {print s}'`
+fi
+
+time -p (timeout $TO_GECODE $FZ_GECODE 1>$OUT 2>$ERR) 2>$TMP
+ret=$?
+if
+  [ $ret -eq 0 ]
+then
+  sat=`grep "satisfy" $OUT`
+  if
+    [ -n "$sat" ]
+  then
+    ok1=`grep "=====UNKNOWN=====" $OUT`
+    ok=''
+  else
+    ok1='ok'
+    ok2=`grep "==========\|=====UNSATISFIABLE=====" $OUT`
+  fi
+  echo $ok
+  if
+    [[ -n "$ok1" && -z "$ok2" ]]
+  then
+    feat_row=`grep "%%" $OUT | awk 'NR > 2 {if (NR > 8) printf $4"|"; else printf $3"|"}' | awk -F"|" '{printf $1"|"$4"|"$5"|"$6"|"$7"|"$8; printf "|"$4/$3"|"; printf $6/$5"|" }'`
+    unk=0
+  else
+    rm $OUT
+    rm $TMP
+    echo "fz solved in less than 2 seconds!" 1>&2
+    cat $ERR 1>&2
+    rm $ERR
+    exit 3    
+  fi
+else
+  feat_row='-1|-1|-1|-1|-1|-1|-1|-1|'
+  if
+    [ $ret -eq 124 ]
+  then
+    echo "fz timeout!" 1>&2
+    cat $ERR 1>&2
+    rm $ERR 
+    EXIT=4
+  else
+    echo "fz error!" 1>&2
+    cat $ERR 1>&2
+    rm $ERR
+    EXIT=5
+  fi
+fi
+
+time -p (timeout $TO_SFEAT $SFEAT $FZN 1>$OUT 2>$ERR) 2>$TMP
+ret=$?
+cat $ERR 1>&2
+rm $ERR
+rm $FZN
+if
+  [[ "$ret" -eq 0 || "$ret" -eq 8 ]]
+then
+  sfeat_time=`cat $TMP | awk -v s=0.0 'NR > 1 {s += $2} END {print s}'`
+  sfeat=`cat $OUT`
+  feat_row=$sfeat'|'$feat_row''$fzn_time'|'$sfeat_time
+  EXIT=$ret
+else
+  rm $TMP
+  rm $OUT
+  if
+    [ $ret -eq 124 ]
+  then
+    echo "fzn2feat timeout!" 1>&2
+    exit 6
+  else
+    echo "fzn2feat error!" 1>&2
+    exit 7
+  fi
+fi
+echo $feat_row
+rm $TMP
+rm $OUT
+exit $EXIT

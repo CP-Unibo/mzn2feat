@@ -1,0 +1,43 @@
+#! /bin/bash
+
+# Extracts all the features for a given MiniZinc instance.
+
+FEAT=mzn2feat_1
+TMP='/home/phd-students/amadini/tmp1_'$HOSTNAME
+OUT='/home/phd-students/amadini/out1_'$HOSTNAME
+ERR='/home/phd-students/amadini/err1_'$HOSTNAME
+TO=900
+mzn=$1
+dzn=$2
+NODATA=`echo $dzn | grep "NODATA"`
+if
+  [ -n "$NODATA" ]
+then
+  dzn=''
+fi
+time -p (timeout $TO $FEAT $mzn $dzn 1>$OUT 2>$ERR) 2>$TMP
+ret=$?
+cat $ERR 1>&2
+if 
+  [[ ("$ret" -eq 0) || ("$ret" -ge 4 && "$ret" -le 5) || ("$ret" -eq 8) ]]
+then
+  tot_time=`cat $TMP | awk -v s=0.0 'NR > 1 {s += $2} END {print s}'`
+  if
+    [ -z $dzn ]
+  then
+    dzn='NODATA'
+  fi
+  feat_row=$mzn"_AND_"$dzn"|"`cat $OUT`'|'$tot_time
+  # feat_row = <mzn>_AND_<dzn>|static_feat|dynamic_feat
+  echo $feat_row
+elif
+  [ $ret -eq 124 ]
+then
+  echo "mzn2feat timeout!" 1>&2
+  cat $ERR 1>&2
+  ret=9
+fi
+rm $TMP
+rm $OUT
+rm $ERR
+exit $ret

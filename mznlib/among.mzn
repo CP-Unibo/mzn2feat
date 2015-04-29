@@ -1,2 +1,0 @@
-predicate among(var int: n, array[int] of var int: x, set of int: v);
-
