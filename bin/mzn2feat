@@ -39,11 +39,13 @@ from os.path import splitext, basename
 from subprocess import call, Popen
 from random import randint
 
-IDENT_FILE = environ['MZN2FEAT_HOME'] + '/fzn2feat/features.id'
-DESCR_FILE = environ['MZN2FEAT_HOME'] + '/fzn2feat/features.descr'
+MZN2FEAT_HOME = os.path.realpath(__file__).split('/')[:-2]
+MZN2FEAT_HOME = '/'.join(MZN2FEAT_HOME)
+IDENT_FILE = MZN2FEAT_HOME + '/fzn2feat/features.id'
+DESCR_FILE = MZN2FEAT_HOME + '/fzn2feat/features.descr'
 TMP_MZN    = None
 TMP_FZN    = None
-MZNLIB     = environ['MZN2FEAT_HOME'] + '/mznlib'
+MZNLIB     = MZN2FEAT_HOME + '/mznlib'
 KEEP       = False
 PID        = None
 

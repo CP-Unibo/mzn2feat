@@ -1,4 +1,3 @@
-
 XFLAGS=   `xml2-config --cflags`
 GFLAGS= 
 XLIBS=    `xml2-config --libs`
@@ -10,7 +9,7 @@ all: xcsp2mzn
 
 xcsp2mzn: xcsp2mzn.o
 	g++   -o $@ $^ $(LDFLAGS)
-	cp xcsp2mzn $(MZN2FEAT_HOME)/bin
+	cp xcsp2mzn ../bin
 %.o: %.cpp xcsp-parser/*.h xcsp-parser/*.hh Makefile
 	g++ $(CXXFLAGS) -c -o $@ $<
 	

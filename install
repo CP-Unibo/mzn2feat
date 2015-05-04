@@ -1,0 +1,82 @@
+#!/bin/bash
+# mzn2feat installer.
+
+MZN2FEAT_HOME=`dirname "$(readlink -f ${BASH_SOURCE[0]})"`
+export PATH=$PATH:$MZN2FEAT_HOME/bin
+
+echo -n 'Testing MiniZinc installation...'
+which minizinc 1>/dev/null
+ret=$?
+if 
+  [ $ret -ne 0 ]
+then
+  echo 'Error! MiniZinc not properly installed'
+  echo 'Aborted.'
+  exit $ret
+fi
+echo 'OK!'
+
+echo -n 'Testing Flex installation...'
+which flex 1>/dev/null
+ret=$?
+if 
+  [ $ret -ne 0 ]
+then
+  echo 'Error! Flex not properly installed'
+  echo 'Aborted.'
+  exit $ret
+fi
+echo 'OK!'
+
+echo -n 'Testing Bison installation...'
+which bison 1>/dev/null
+ret=$?
+if 
+  [ $ret -ne 0 ]
+then
+  echo 'Error! Bison not properly installed'
+  echo 'Aborted.'
+  exit $ret
+fi
+echo 'OK!'
+
+echo -n 'Testing GNOME XML library installation...'
+if 
+  [[ `/sbin/ldconfig -p | grep "libxml++"` == '' && "$1" != "--no-xcsp" ]]
+then
+  echo 'Error! GNOME XML library not properly installed.'
+  echo "If you don't want to install xcsp2mzn, please set --no-xcsp option."
+  echo 'Aborted.'
+  exit $ret
+fi
+echo 'OK!'
+
+if 
+  [ "$1" != "--no-xcsp" ]
+then
+  echo -e "\n--- Installing xcsp2mzn compiler...\n"
+  cd $MZN2FEAT_HOME/xcsp2mzn
+  make
+  ret=$?
+  if 
+    [ $ret -ne 0 ]
+  then
+    echo "--- Installation aborted!"
+    exit $ret
+  fi
+fi
+
+echo -e "\n--- Installing fzn2feat extractor...\n"
+cd $MZN2FEAT_HOME/fzn2feat
+make
+ret=$?
+if 
+  [ $ret -ne 0 ]
+then
+  echo "--- Installation aborted!"
+  exit $ret
+fi
+
+echo -e "\n--- Everything went well!\n"
+echo -n  "To complete mzn2feat installation don't forget to add "
+echo -e "$MZN2FEAT_HOME/bin to your PATH\n"

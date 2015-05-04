@@ -1,13 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 # uninstall.sh - uninstalls mzn2feat. 
 #
-# Usage: uninstall.sh [OPTIONS]
+# Usage: uninstall [OPTIONS]
 #
 # Options:
 #   -h	Print this message.
 #
 #   -c 	Creates here a .tar.bz2 archive of mzn2feat tool.
 
+MZN2FEAT_HOME=`dirname "$(readlink -f ${BASH_SOURCE[0]})"`
 OPTIND=1
 compress=0
 while getopts "hc" opt;
@@ -17,7 +18,7 @@ do
         echo "Usage: uninstall.sh [OPTIONS]\n"
         echo "Options: \n"
         echo "-h	Print this message.\n"
-        echo "-c 	Creates here a .tar.bz2 archive of mzn2feat tool.\n"
+        echo "-c 	Also creates here a .tar.bz2 archive of mzn2feat.\n"
         exit 0
         ;;    
     c)  compress=1

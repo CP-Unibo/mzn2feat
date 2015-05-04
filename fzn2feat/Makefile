@@ -22,7 +22,7 @@ RM =		/bin/rm -f
 
 $(EXE_FILE):	$(OBJ)
 		$(CC) $(CFLAGS) -o $(EXE_FILE) $(OBJ) $(LEXLIB)
-		cp $(EXE_FILE) $(MZN2FEAT_HOME)/bin
+		cp $(EXE_FILE) ../bin
 
 flatzinc.tab.c:	flatzinc.y lex.yy.c static_features.cc expr.cc
 		$(YACC) $(YACCFLAGS) flatzinc.y

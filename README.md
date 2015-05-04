@@ -50,8 +50,8 @@ CONTENTS
 PREREQUISITES
 =============
 
-The installation guide was tested on a 64-bit machine running Ubuntu 12.04.
-Some of the main requirements are:
+mzn2feat is tested on 64-bit machines running Ubuntu 12.04, and not yet fully 
+portable on other platforms. 
 
 + MiniZinc 1.6
 	http://www.minizinc.org/
@@ -70,23 +70,12 @@ INSTALLATION
 
 1. Move into the mzn2feat folder and run the installer:
 
-      mzn2feat$ ./install.sh [--no-xcsp]
+      mzn2feat$ ./install [--no-xcsp]
     
    Note that setting the option --no-xcsp avoids to install the xcsp2mzn 
    converter (e.g., if you don't want / cannot install the XML libraries).
-   
-2. Add/modify the environment variables MZN2FEAT_HOME and PATH:
-
-      MZN2FEAT_HOME must point to your <installdir>
-      PATH must be extended to include <installdir>/bin
       
-   where <installdir> is the directory mzn2feat.
-   For instance, bash users would add the following lines to .bashrc file:
-
-      $ export MZN2FEAT_HOME="<installdir>"
-      $ export PATH="${PATH}:${MZN2FEAT_HOME}/bin"
-      
-4. Try it out! (for help, type mzn2feat --help)
+2. Try it out! (for help, type mzn2feat --help)
 
   mzn2feat - a features extractor for (not only) MiniZinc models.
 
