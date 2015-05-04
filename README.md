@@ -1,4 +1,4 @@
-mzn2feat 1.0
+mzn2feat 1.1
 ============
 
 The features extractor tool mzn2feat was mainly developed by Roberto 
@@ -13,14 +13,9 @@ designed to be more portable, light, flexible, and independent from the
 particular machine on which it is run as well as from the specific global 
 redefinitions of a given solver. This version of mzn2feat was used in [4][5][6].
 
-Apart from the implementation details, the main differences between 
-mzn2feat-0.1 and mzn2feat-1.0 regard the set of features set that 
-mzn2feat-1.0 can extract. Indeed, the current version does not compute graph 
-features (since this process could be very time/space consuming), solver 
-specific features (like particular global redefinitions) and dynamic features 
-(to decouple mzn2feat from a particular solver and from the given machine on 
-which it is executed). For a brief description of the features set, once 
-installed the tool, run the command mzn2feat -P.
+The main differences between version 1.1 and 1.0 are that now mzn2feat supports 
+also MiniZinc 2.0 and that the installation does not require to set the 
+MZN2FEAT_HOME environment variable.
 
 
 CONTENTS
@@ -53,7 +48,7 @@ PREREQUISITES
 mzn2feat is tested on 64-bit machines running Ubuntu 12.04, and not yet fully 
 portable on other platforms. 
 
-+ MiniZinc 1.6
++ MiniZinc 1.6 or higher
 	http://www.minizinc.org/
 
 + Flex library
