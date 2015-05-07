@@ -1,0 +1,1 @@
+predicate network_flow(array[int,1..2] of int: arc, array[int] of int: balance, array[int] of var int: flow);
