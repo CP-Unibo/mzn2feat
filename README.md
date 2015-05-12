@@ -1,5 +1,5 @@
-mzn2feat 1.1
-============
+mzn2feat 1.1.1
+==============
 
 The features extractor tool mzn2feat was mainly developed by Roberto 
 Amadini (University of Bologna / Lab. Focus INRIA). Jacopo Mauro (University 
@@ -13,9 +13,8 @@ designed to be more portable, light, flexible, and independent from the
 particular machine on which it is run as well as from the specific global 
 redefinitions of a given solver. This version of mzn2feat was used in [4][5][6].
 
-The main differences between version 1.1 and 1.0 are that now mzn2feat supports 
-also MiniZinc 2.0 and that the installation does not require to set the 
-MZN2FEAT_HOME environment variable.
+Version 1.1.1 adds to version 1.1 the global constraints of MiniZinc 2.0 not 
+implemented in MiniZinc 1.6.
 
 
 CONTENTS
