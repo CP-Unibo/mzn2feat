@@ -1,4 +1,4 @@
-mzn2feat 1.1.1
+mzn2feat 1.1.2
 ==============
 
 The features extractor tool mzn2feat was mainly developed by Roberto 
@@ -13,8 +13,8 @@ designed to be more portable, light, flexible, and independent from the
 particular machine on which it is run as well as from the specific global 
 redefinitions of a given solver. This version of mzn2feat was used in [4][5][6].
 
-Version 1.1.1 adds to version 1.1 the global constraints of MiniZinc 2.0 not 
-implemented in MiniZinc 1.6.
+Version 1.1.2 adds to version 1.1 the global constraints of MiniZinc 2.0 not 
+implemented in MiniZinc 1.6. Environment variables no longer needed.
 
 
 CONTENTS
@@ -64,7 +64,7 @@ INSTALLATION
 
 1. Move into the mzn2feat folder and run the installer:
 
-      mzn2feat$ ./install [--no-xcsp]
+      mzn2feat$ bash install [--no-xcsp]
     
    Note that setting the option --no-xcsp avoids to install the xcsp2mzn 
    converter (e.g., if you don't want / cannot install the XML libraries).
@@ -110,7 +110,7 @@ included in mzn2feat/test folder. One can do it manually, for instance:
 
 or, alternatively, is possible to run all the tests of the folder by running:
 
-      mzn2feat/test$ ./run-tests [--no-xcsp]
+      mzn2feat/test$ bash run-tests [--no-xcsp]
       
 where the option --no-xcsp avoids to test the XCSP instances in test/xcsp.
 

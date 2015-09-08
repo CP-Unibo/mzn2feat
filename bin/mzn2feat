@@ -34,18 +34,20 @@ import getopt
 import json
 import signal
 import os
-from os import environ, remove
+from os import remove
 from os.path import splitext, basename
 from subprocess import call, Popen
+from socket import gethostname
 from random import randint
 
 MZN2FEAT_HOME = os.path.realpath(__file__).split('/')[:-2]
 MZN2FEAT_HOME = '/'.join(MZN2FEAT_HOME)
 IDENT_FILE = MZN2FEAT_HOME + '/fzn2feat/features.id'
 DESCR_FILE = MZN2FEAT_HOME + '/fzn2feat/features.descr'
+TMP_DIR    = MZN2FEAT_HOME + '/tmp'
+MZNLIB     = MZN2FEAT_HOME + '/mznlib'
 TMP_MZN    = None
 TMP_FZN    = None
-MZNLIB     = MZN2FEAT_HOME + '/mznlib'
 KEEP       = False
 PID        = None
 
@@ -75,11 +77,7 @@ def xcsp2mzn(xcsp_file):
   Converts an XCSP model to MiniZinc.
   '''
   global PID, KEEP, MZNLIB, TMP_MZN
-  while not TMP_MZN:
-    TMP_MZN = environ['PWD'] + '/' + splitext(basename(xcsp_file))[0]  \
-            + '_tmp' + str(randint(0, 9999)) + '.feat.mzn'
-    if os.path.exists(TMP_MZN):
-      TMP_MZN = None
+  TMP_MZN = TMP_DIR + '/' + gethostname() + '_' + str(os.getpid()) + '.mzn'
   cmd ='xcsp2mzn ' + xcsp_file
   proc = Popen(cmd.split(), stdout = open(TMP_MZN, 'w'))
   PID = proc.pid
@@ -95,11 +93,7 @@ def mzn2fzn(mzn_file, dzn_file):
   Converts a MiniZinc model to FlatZinc, keeping all the global constraints.
   '''
   global KEEP, MZNLIB, TMP_FZN, TMP_MZN
-  while not TMP_FZN:
-    TMP_FZN = environ['PWD'] + '/' + splitext(basename(mzn_file))[0] \
-            + '_tmp' + str(randint(0, 9999)) + '.feat.fzn'
-    if os.path.exists(TMP_FZN):
-      TMP_FZN = None
+  TMP_FZN = TMP_DIR + '/' + gethostname() + '_' + str(os.getpid()) + '.fzn'
   cmd = 'mzn2fzn --no-output-ozn -I ' + MZNLIB + ' ' \
       + mzn_file + ' ' + dzn_file + ' -o ' + TMP_FZN
   proc = Popen(cmd.split())
