@@ -78,6 +78,8 @@ string manageOperator (const AST & oper) {
 }
 
 
+string manageBoolExpr (const AST & expr);
+
 string manageIntExpr (const AST & expr) {
 	string ret = "";
 	if ( expr.isInteger() )
@@ -90,7 +92,7 @@ string manageIntExpr (const AST & expr) {
         NodeType  oper(aF.getType());
 
         if ( false == isIntegerOp(oper) )
-            throw std::runtime_error("integer operator failure");
+						throw std::runtime_error("integer operator failure (" + to_string(oper) + ")");
 
         switch ( oper ) {
         	case F_ABS:
@@ -170,11 +172,11 @@ string manageIntExpr (const AST & expr) {
 
             case F_IF:
                 ret = "(bool2int(";
-                ret.append( manageIntExpr(aF.getArg(0)) );
+                ret.append( manageBoolExpr(aF.getArg(0)) );
                 ret.append(") * ");
                 ret.append( manageIntExpr(aF.getArg(1)) );
                 ret.append(" + bool2int(not(");
-                ret.append( manageIntExpr(aF.getArg(0)) );
+                ret.append( manageBoolExpr(aF.getArg(0)) );
                 ret.append(") * ");
                 ret.append( manageIntExpr(aF.getArg(1)) );
                 ret.append(") * ");
