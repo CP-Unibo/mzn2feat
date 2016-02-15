@@ -177,9 +177,9 @@ string manageIntExpr (const AST & expr) {
                 ret.append( manageIntExpr(aF.getArg(1)) );
                 ret.append(" + bool2int(not(");
                 ret.append( manageBoolExpr(aF.getArg(0)) );
-                ret.append(") * ");
+                ret.append(")) * ");
                 ret.append( manageIntExpr(aF.getArg(1)) );
-                ret.append(") * ");
+                ret.append(")");
                 break;
 
             default:
