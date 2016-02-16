@@ -284,9 +284,9 @@ string manageBoolExpr (const AST & expr) {
                 ret.append(")");
                 break;
 
-            case F_NEG:
+            case F_NOT:
                 ret = "not(";
-                ret.append( manageIntExpr(aF.getArg(0)) );
+                ret.append( manageBoolExpr(aF.getArg(0)) );
                 ret.append(")");
                 break;
 
@@ -299,7 +299,7 @@ string manageBoolExpr (const AST & expr) {
                 break;
 
             default:
-               throw std::runtime_error("unexpected operator dealing with boolean expression");
+               throw std::runtime_error("unexpected operator dealing with boolean expression (" + to_string(oper) + ")");
                break;
           }
        }
