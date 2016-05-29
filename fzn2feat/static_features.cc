@@ -170,8 +170,9 @@ public:
   update_assigned_var_array(var_info& vi, expr_list* el) {
     vi.id = -1;
     vi.assigned = true;
-    string array_name = string(vi.name);
+    string array_name = vi.name;
     vars_to_info[array_name] = vi;
+// 
     int i = vi.begin;
     for (expr_list::iterator it = el->begin(); it != el->end(); ++it) {
       var_info vii = vi;
@@ -182,19 +183,19 @@ public:
       vii.assigned = true;
       if ((*it)->type() == STRING_EXPR) {
         var_info vi_alias = vars_to_info[string((*it)->value().string_val)];
-	while (vi_alias.alias)
-	  vi_alias = vars_to_info[vi_alias.alias->name];
+        while (vi_alias.alias)
+          vi_alias = vars_to_info[vi_alias.alias->name];
         vii.alias = new var_info(vi_alias);
         ++features["v_num_aliases"];
       }
       else {
         vii.alias = NULL;
-	++features["v_num_consts"];
+	    ++features["v_num_consts"];
       }
       vars_to_info[var_name] = vii;
       ++i;
     }
-    
+
     int n = vi.end - vi.begin + 1;
     expr_set* anns = vi.anns;
     for (expr_set::iterator i = anns->begin(); i != anns->end(); ++i)
@@ -287,15 +288,15 @@ public:
       int i = name.find('_');
       string dom = name.substr(0, i);
       if (dom == "array")
-	++features["d_array_cons"];
+	    ++features["d_array_cons"];
       else if (dom == "bool")
-	++features["d_bool_cons"];
+	    ++features["d_bool_cons"];
       else if (dom == "float")
-	++features["d_float_cons"];
+	    ++features["d_float_cons"];
       else if (dom == "int")
-	++features["d_int_cons"];
+	    ++features["d_int_cons"];
       else if (dom == "set")
-	++features["d_set_cons"];
+	    ++features["d_set_cons"];
     }
     bool priority = true;
     bool bounds = true;
@@ -305,11 +306,11 @@ public:
       expr_type et = (*i)->type();
       string ann;
       if (priority && et == ARRAY_EXPR) {
-	ann = string((*i)->value().list_val->front()->value().string_val);
-	if (ann == "priority")
-	  ++features["c_priority"];
-	priority = false;
-	continue;	  
+        ann = string((*i)->value().list_val->front()->value().string_val);
+        if (ann == "priority")
+          ++features["c_priority"];
+        priority = false;
+        continue;	  
       }
       if (!bounds)
 	break;
@@ -334,40 +335,40 @@ public:
       double dom = 0; 
       expr_list::iterator i, j;
       for (i = params->begin(); i != params->end(); ++i)
-	switch ((*i)->type()) {
-	  // The argument is a variable of the form A[i]. 
-	  case ARRAY_EXPR: {
-	    expr_list* exprs = (*i)->value().list_val;
-	    for (j = exprs->begin(); j != exprs->end(); ++j)
-	      if ((*j)->type() == STRING_EXPR) {
-                string var_name = string((*j)->value().string_val);
-	        update_cons(vars_to_info[var_name], con_vars, dom);
-	      }
-	    break;
-	  }
-	  // The argument is either a variable or an array of variables.
-	  case STRING_EXPR: {
-	    string var_name = string((*i)->value().string_val);
-	    var_info vi = vars_to_info[var_name];
-	    if (vi.array)
-	      for (int j = vi.begin; j <= vi.end; ++j) {
-		string var_id = var_name + "[" + to_string(j) + "]";
-		update_cons(vars_to_info[var_id], con_vars, dom);
-	      }
-	    else
-	      update_cons(vi, con_vars, dom);
-	    break;
-	  }
-	  default:
-	    continue;
+        switch ((*i)->type()) {
+          // The argument is a variable of the form A[i].
+          case ARRAY_EXPR: {
+            expr_list* exprs = (*i)->value().list_val;
+            for (j = exprs->begin(); j != exprs->end(); ++j)
+              if ((*j)->type() == STRING_EXPR) {
+                string var_name = (*j)->value().string_val;
+                update_cons(vars_to_info[(*j)->value().string_val], con_vars, dom);
+              }
+            break;
+          }
+          // The argument is either a variable or an array of variables.
+          case STRING_EXPR: {
+            string var_name = string((*i)->value().string_val);
+            var_info vi = vars_to_info[var_name];
+            if (vi.array)
+              for (int j = vi.begin; j <= vi.end; ++j) {
+                string var_id = var_name + "[" + to_string(j) + "]";
+                update_cons(vars_to_info[var_id], con_vars, dom);
+              }
+            else
+              update_cons(vi, con_vars, dom);
+            break;
+          }
+          default:
+            continue;
         }
       double deg = con_vars.size();
       // Ignore constraints that not involve variables.
       if (deg == 0) {
-	std::cerr << "Warning: constraint " << name
-	          << " has degree 0." << endl;
-        return;
-      }
+// 	std::cerr << "Warning: constraint " << name
+// 	          << " has degree 0." << endl;
+         return;
+       }
       ++features["c_num_cons"];
       features["c_sum_dom_cons"] += dom;
       sum_dom_cons2 += dom * dom;
@@ -450,9 +451,9 @@ public:
       print_dict();
     else
       if (output == "pp")
-	print_pp();
+	    print_pp();
       else
-	print_csv();
+	    print_csv();
   }
   
   /*
@@ -659,6 +660,8 @@ private:
   update_cons(const var_info& vi, set<int>& con_vars, double& dom) {
     std::pair<set<int>::const_iterator, bool> p;
     int var_id;
+    if (!vi.name)
+      return;
     string var_name;
     if (vi.alias) {
       var_id = vi.alias->id;
@@ -666,10 +669,10 @@ private:
     }
     else
       if (vi.assigned)
-	return;
+        return;
       else {
         var_id = vi.id;
-	var_name = vi.name;
+	    var_name = vi.name;
       }
     p = con_vars.insert(var_id);
     if (p.second) {
@@ -736,10 +739,10 @@ private:
 	    features["v_max_domdeg_vars"] = domdeg;
 	  ++count_domdeg_vars[floor(domdeg + 0.5)];
        }
-       else
-         if (!iter->second.assigned)
-	   std::cerr << "Warning: variable " << iter->second.name
-	             << " has degree 0." << endl;
+//        else
+//          if (!iter->second.assigned)
+// 	   std::cerr << "Warning: variable " << iter->second.name
+// 	             << " has degree 0." << endl;
       }
     m = features["v_sum_deg_vars"] / n;
     features["v_avg_deg_vars"] = m;

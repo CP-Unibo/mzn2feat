@@ -154,13 +154,13 @@ class string_expr: public expression {
 private:
   
   string val;
-  
+
 public:
   
-  string_expr(const char* s) : val(s) {}
+  string_expr(string s) : val(s) {}
   
-  string_expr(const char* s, int i) {
-    val = string(s) + "[" + to_string(i) + "]";
+  string_expr(string s, int i) {
+    val = s + "[" + to_string(i) + "]";
   }
   
   expr_value
@@ -170,7 +170,7 @@ public:
   
   expr_type
   type() {
-    return STRING_EXPR;  
+    return STRING_EXPR;
   }
  
   void destroy() { }
@@ -268,7 +268,7 @@ public:
   type() {
     return SET_EXPR;  
   }
-      
+
   void
   destroy() {
     if (val) {

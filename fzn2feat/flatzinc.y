@@ -38,7 +38,7 @@ const double MAX_FLOAT_SIZE = static_features::inf;
 const double MAX_SET_SIZE   = static_features::inf;
 
 bool initialized = false;
-expression* array_elems;
+array_expr* array_elems;
 static_features sf;
 
 %}
@@ -169,7 +169,7 @@ array_decl_tail:
     expr_set es;
     set_expr::list_to_set(*$3, es);
     $$.anns = new expr_set(es);
-    array_elems = $5;
+    array_elems = (array_expr*) $5;
   }
   | VAR non_array_ti_expr_tail ':' ident_anns array_decl_tail2 {
     $$ = $2;
@@ -178,7 +178,7 @@ array_decl_tail:
     expr_set es;
     set_expr::list_to_set(*$4, es);
     $$.anns = new expr_set(es);
-    array_elems = $5;
+    array_elems = (array_expr*) $5;
   }
   
 array_decl_tail2:
