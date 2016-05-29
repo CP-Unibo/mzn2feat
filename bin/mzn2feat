@@ -46,6 +46,7 @@ IDENT_FILE = MZN2FEAT_HOME + '/fzn2feat/features.id'
 DESCR_FILE = MZN2FEAT_HOME + '/fzn2feat/features.descr'
 TMP_DIR    = MZN2FEAT_HOME + '/tmp'
 MZNLIB     = MZN2FEAT_HOME + '/mznlib'
+MZN2FZN    = 'mzn2fzn'
 TMP_MZN    = None
 TMP_FZN    = None
 KEEP       = False
@@ -94,8 +95,8 @@ def mzn2fzn(mzn_file, dzn_file):
   '''
   global KEEP, MZNLIB, TMP_FZN, TMP_MZN
   TMP_FZN = TMP_DIR + '/' + gethostname() + '_' + str(os.getpid()) + '.fzn'
-  cmd = 'mzn2fzn --no-output-ozn -I '  + MZNLIB + ' ' \
-      +  mzn_file + ' ' + dzn_file + ' -o ' + TMP_FZN
+  cmd = MZN2FZN  + ' --no-output-ozn -I '  + MZNLIB + ' ' \
+      + mzn_file + ' ' + dzn_file + ' -o ' + TMP_FZN
   proc = Popen(cmd.split())
   PID = proc.pid
   proc.communicate()
