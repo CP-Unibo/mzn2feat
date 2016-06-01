@@ -46,7 +46,6 @@ IDENT_FILE = MZN2FEAT_HOME + '/fzn2feat/features.id'
 DESCR_FILE = MZN2FEAT_HOME + '/fzn2feat/features.descr'
 TMP_DIR    = MZN2FEAT_HOME + '/tmp'
 MZNLIB     = MZN2FEAT_HOME + '/mznlib'
-MZN2FZN    = 'mzn2fzn'
 TMP_MZN    = None
 TMP_FZN    = None
 KEEP       = False
@@ -95,7 +94,7 @@ def mzn2fzn(mzn_file, dzn_file):
   '''
   global KEEP, MZNLIB, TMP_FZN, TMP_MZN
   TMP_FZN = TMP_DIR + '/' + gethostname() + '_' + str(os.getpid()) + '.fzn'
-  cmd = MZN2FZN  + ' --no-output-ozn -I '  + MZNLIB + ' ' \
+  cmd = 'mzn2fzn --no-output-ozn -I ' + MZNLIB + ' ' \
       + mzn_file + ' ' + dzn_file + ' -o ' + TMP_FZN
   proc = Popen(cmd.split())
   PID = proc.pid
@@ -128,10 +127,8 @@ def fzn2feat(fzn_file, output, redirect):
     if TMP_MZN and os.path.exists(TMP_MZN):
       remove(TMP_MZN)
   if proc.returncode != 0:
-    sys.stderr.write(
-      '*** Exit status ' + str(proc.returncode) + ' after extracting features\n'
-    )
-    #sys.exit(proc.returncode)
+    sys.stderr.write('*** Error while extracting features\n')
+    sys.exit(proc.returncode)
 
 def main(args):
   global KEEP, TMP_FZN, TMP_MZN
@@ -197,7 +194,8 @@ def main(args):
     mzn2fzn(mzn, dzn)
     global TMP_FZN
     fzn = TMP_FZN
-
+    
   fzn2feat(fzn, out, red)
+  
 if __name__ == '__main__':
     main(sys.argv[1:])

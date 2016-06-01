@@ -38,11 +38,11 @@ typedef map<double, double>   :: const_iterator count_iterator;
 class static_features {
 
 public:
-  
+
   static double inf;
   map<string, double> features;
   map<string, var_info> vars_to_info;
-  
+
   static_features() {
     // Initialilization.
     init_vars();
@@ -60,30 +60,30 @@ public:
     sum_ari_cons2    = 0.0;
     sum_domdeg_cons2 = 0.0;
   }
-  
+
   /*
    * Class destructor. De-allocates expressions for (possible) aliases.
    */
   ~static_features() {
     for (vars_iterator i = vars_to_info.begin(); 
-	               i != vars_to_info.end(); ++i) {
+                      i != vars_to_info.end(); ++i) {
       var_info* j = i->second.alias;
       while (j) {
-	var_info* k = j->alias;
-	expr_set* es = j->anns;
-	for (expr_set::iterator h = es->begin(); h != es->end(); ++h)
+        var_info* k = j->alias;
+        expr_set* es = j->anns;
+        for (expr_set::iterator h = es->begin(); h != es->end(); ++h)
           if ((*h) != NULL)
-	    (*h)->destroy();
+            (*h)->destroy();
         delete j;
         if (k)
-	  j = k;
-	else
-	  j = 0;
+          j = k;
+        else
+          j = 0;
       }
     }
   }
-  
-  
+
+
   /*
    * Updates the features for an assigned variable (i.e., a constant or an 
    * alias).
@@ -95,7 +95,7 @@ public:
     if (e->type() == STRING_EXPR) {
       var_info vi_alias = vars_to_info[string(e->value().string_val)];
       while (vi_alias.alias)
-	vi_alias = vars_to_info[vi_alias.alias->name];
+        vi_alias = vars_to_info[vi_alias.alias->name];
       vi.alias = new var_info(vi_alias);
       ++features["v_num_aliases"];
     }
@@ -115,7 +115,7 @@ public:
     }
     vars_to_info[string(vi.name)] = vi;
   }
-  
+
   /*
    * Updates the features for a not assigned variable.
    */
@@ -125,22 +125,22 @@ public:
     vi.alias = NULL;
     vi.degree = 0;
     vi.assigned = false;
-    
+
     switch (vi.type) {
       case BOOL_EXPR:
-	++features["d_bool_vars"];
-	break;
+        ++features["d_bool_vars"];
+        break;
       case FLOAT_EXPR:
-	++features["d_float_vars"];
-	break;
+        ++features["d_float_vars"];
+        break;
       case INT_EXPR:
-	++features["d_int_vars"];
-	break;
+        ++features["d_int_vars"];
+        break;
       case SET_EXPR:
-	++features["d_set_vars"];
-	break; 
+        ++features["d_set_vars"];
+        break; 
     }
-    
+
     double dom = vi.dom_size;
     features["v_sum_dom_vars"] += dom;
     features["v_logprod_dom_vars"] += log2(dom);
@@ -150,7 +150,7 @@ public:
     if (dom > features["v_max_dom_vars"])
       features["v_max_dom_vars"] = dom;
     ++count_dom_vars[dom];
-    
+
     expr_set* anns = vi.anns;
     for (expr_set::iterator i = anns->begin(); i != anns->end(); ++i) {
       string ann = string((*i)->value().string_val);
@@ -162,7 +162,7 @@ public:
     }
     vars_to_info[string(vi.name)] = vi;
   }
-  
+
   /*
    * Updates the features for an array of assigned variables.
    */
@@ -170,9 +170,8 @@ public:
   update_assigned_var_array(var_info& vi, expr_list* el) {
     vi.id = -1;
     vi.assigned = true;
-    string array_name = vi.name;
+    string array_name = string(vi.name);
     vars_to_info[array_name] = vi;
-// 
     int i = vi.begin;
     for (expr_list::iterator it = el->begin(); it != el->end(); ++it) {
       var_info vii = vi;
@@ -190,7 +189,7 @@ public:
       }
       else {
         vii.alias = NULL;
-	    ++features["v_num_consts"];
+        ++features["v_num_consts"];
       }
       vars_to_info[var_name] = vii;
       ++i;
@@ -208,7 +207,7 @@ public:
             features["v_intro_vars"] += n;
       }
   }
-  
+
   /*
    * Updates the features for an array of not assigned variables.
    */
@@ -218,7 +217,7 @@ public:
     vi.assigned = false;
     string array_name = string(vi.name);
     vars_to_info[array_name] = vi;
-    
+
     int a = vi.begin;
     int b = vi.end;
     for (int i = a; i <= b; ++i) {
@@ -232,21 +231,21 @@ public:
       vii.assigned = false;
       vars_to_info[var_name] = vii;
     }
-    
+
     int n = b - a + 1;
     switch (vi.type) {
       case BOOL_EXPR:
-	features["d_bool_vars"] += n;
-	break;
+        features["d_bool_vars"] += n;
+        break;
       case FLOAT_EXPR:
-	features["d_float_vars"] += n;
-	break;
+        features["d_float_vars"] += n;
+        break;
       case INT_EXPR:
-	features["d_int_vars"] += n;
-	break;
+        features["d_int_vars"] += n;
+        break;
       case SET_EXPR:
-	features["d_set_vars"] += n;
-	break;
+        features["d_set_vars"] += n;
+        break;
     }
     double dom = vi.dom_size;
     features["v_sum_dom_vars"] += dom * n;
@@ -257,7 +256,7 @@ public:
     if (vi.dom_size > features["v_max_dom_vars"])
       features["v_max_dom_vars"] = dom;
     count_dom_vars[dom] += n;
-    
+
     expr_set* anns = vi.anns;
     for (expr_set::iterator i = anns->begin(); i != anns->end(); ++i)
       if ((*i)->type() == STRING_EXPR) {
@@ -269,7 +268,7 @@ public:
             features["v_intro_vars"] += n;
       }
   }
- 
+
   /*
    * Updates the features for a (possibly global) constraint.
    */
@@ -288,15 +287,15 @@ public:
       int i = name.find('_');
       string dom = name.substr(0, i);
       if (dom == "array")
-	    ++features["d_array_cons"];
+        ++features["d_array_cons"];
       else if (dom == "bool")
-	    ++features["d_bool_cons"];
+        ++features["d_bool_cons"];
       else if (dom == "float")
-	    ++features["d_float_cons"];
+        ++features["d_float_cons"];
       else if (dom == "int")
-	    ++features["d_int_cons"];
+        ++features["d_int_cons"];
       else if (dom == "set")
-	    ++features["d_set_cons"];
+        ++features["d_set_cons"];
     }
     bool priority = true;
     bool bounds = true;
@@ -310,96 +309,100 @@ public:
         if (ann == "priority")
           ++features["c_priority"];
         priority = false;
-        continue;	  
+        continue;
       }
       if (!bounds)
-	break;
+        break;
       ann = string((*i)->value().string_val);
       bounds = false;
       if (ann == "bounds" || ann == "boundsZ")
-	++features["c_bounds_z"];
+        ++features["c_bounds_z"];
       else
-	if (ann == "boundsR")
-	  ++features["c_bounds_r"];
-	else
-	  if (ann == "boundsD")
-	    ++features["c_bounds_d"];
-	  else
-	    if (ann == "domain")
-	      ++features["c_domain"];
-	    else
-	      bounds = true;
-      }
-      // Parse constraint arguments.
-      set<int> con_vars;
-      double dom = 0; 
-      expr_list::iterator i, j;
-      for (i = params->begin(); i != params->end(); ++i)
-        switch ((*i)->type()) {
-          // The argument is a variable of the form A[i].
-          case ARRAY_EXPR: {
-            expr_list* exprs = (*i)->value().list_val;
-            for (j = exprs->begin(); j != exprs->end(); ++j)
-              if ((*j)->type() == STRING_EXPR) {
-                string var_name = (*j)->value().string_val;
-                update_cons(vars_to_info[(*j)->value().string_val], con_vars, dom);
-              }
-            break;
-          }
-          // The argument is either a variable or an array of variables.
-          case STRING_EXPR: {
-            string var_name = string((*i)->value().string_val);
-            var_info vi = vars_to_info[var_name];
-            if (vi.array)
-              for (int j = vi.begin; j <= vi.end; ++j) {
-                string var_id = var_name + "[" + to_string(j) + "]";
-                update_cons(vars_to_info[var_id], con_vars, dom);
-              }
+        if (ann == "boundsR")
+          ++features["c_bounds_r"];
+        else
+          if (ann == "boundsD")
+            ++features["c_bounds_d"];
+          else
+            if (ann == "domain")
+              ++features["c_domain"];
             else
-              update_cons(vi, con_vars, dom);
-            break;
-          }
-          default:
-            continue;
+              bounds = true;
+    }
+
+    // Parse constraint arguments.
+    set<int> con_vars;
+    double dom = 0; 
+    expr_list::iterator i, j;
+    for (i = params->begin(); i != params->end(); ++i)
+      switch ((*i)->type()) {
+        // The argument is a variable of the form A[i]. 
+        case ARRAY_EXPR: {
+          expr_list* exprs = (*i)->value().list_val;
+          for (j = exprs->begin(); j != exprs->end(); ++j)
+            if ((*j)->type() == STRING_EXPR) {
+                string var_name = string((*j)->value().string_val);
+              update_cons(vars_to_info[var_name], con_vars, dom);
+            }
+          break;
         }
+
+        // The argument is either a variable or an array of variables.
+        case STRING_EXPR: {
+          string var_name = string((*i)->value().string_val);
+          var_info vi = vars_to_info[var_name];
+          if (vi.array)
+            for (int j = vi.begin; j <= vi.end; ++j) {
+              string var_id = var_name + "[" + to_string(j) + "]";
+              update_cons(vars_to_info[var_id], con_vars, dom);
+            }
+          else
+            update_cons(vi, con_vars, dom);
+          break;
+        }
+
+        default:
+          continue;
+      }
+
       double deg = con_vars.size();
       // Ignore constraints that not involve variables.
       if (deg == 0) {
-// 	std::cerr << "Warning: constraint " << name
-// 	          << " has degree 0." << endl;
-         return;
-       }
+        std::cerr << "Warning: constraint " << name
+                  << " has degree 0." << endl;
+        return;
+      }
       ++features["c_num_cons"];
       features["c_sum_dom_cons"] += dom;
       sum_dom_cons2 += dom * dom;
       if (dom > 0) 
         features["c_logprod_dom_cons"] += log2(dom);
       if (dom < features["c_min_dom_cons"])
-	features["c_min_dom_cons"] = dom;
+        features["c_min_dom_cons"] = dom;
       if (dom > features["c_max_dom_cons"])
-	features["c_max_dom_cons"] = dom;
+        features["c_max_dom_cons"] = dom;
       ++count_dom_cons[dom];
-      
+
       features["c_sum_ari_cons"] += params->size();
       sum_ari_cons += deg;
       sum_ari_cons2 += deg * deg; 
       features["c_logprod_deg_cons"] += log2(deg);
       if (deg < features["c_min_deg_cons"])
-	features["c_min_deg_cons"] = deg;
+        features["c_min_deg_cons"] = deg;
       if (deg > features["c_max_deg_cons"])
-	features["c_max_deg_cons"] = deg;
+        features["c_max_deg_cons"] = deg;
       ++count_deg_cons[deg];
-      
+
       double domdeg = dom / deg;
       features["c_sum_domdeg_cons"] += domdeg;
       sum_domdeg_cons2 += domdeg * domdeg;
       if (domdeg < features["c_min_domdeg_cons"])
-	features["c_min_domdeg_cons"] = domdeg;
+        features["c_min_domdeg_cons"] = domdeg;
       if (domdeg > features["c_max_domdeg_cons"])
-	features["c_max_domdeg_cons"] = domdeg;
+        features["c_max_domdeg_cons"] = domdeg;
       ++count_domdeg_cons[floor(domdeg + 0.5)];
   }
-  
+
   /*
    * Updates the features for the solving goal.
    */
@@ -413,14 +416,14 @@ public:
     if (search == "seq_search") {
       anns->pop_front();
       for (expr_list::iterator i = anns->begin(); i != anns->end(); ++i) {
-	expr_list* ann = (*i)->value().list_val;
-	update_search(ann);
+        expr_list* ann = (*i)->value().list_val;
+        update_search(ann);
       }
     }
     else
       update_search(anns);
   }
-  
+
   /*
    * Updates the features for objective variable. 
    */
@@ -429,7 +432,7 @@ public:
     string var_name = string(e->value().string_val);
     obj_var = vars_to_info[var_name];
   }
-  
+
   /*
    * Final computation.
    */
@@ -440,8 +443,8 @@ public:
     // If the input model is an optimisation problem.
     if (features["s_goal"] > 1)
       final_update_obj();
-  }  
-  
+  }
+
   /*
    * Prints a representation of the features according to output parameter.
    */
@@ -451,11 +454,11 @@ public:
       print_dict();
     else
       if (output == "pp")
-	    print_pp();
+        print_pp();
       else
-	    print_csv();
+        print_csv();
   }
-  
+
   /*
   * Prints a comma-separated list of the features values.
   */
@@ -468,7 +471,7 @@ public:
       cout << to_string(iter->second) << ',';
     cout << to_string(iter->second) << endl;
   }
-  
+
   /*
   * Prints a python-like dictionary which associates to each identifier 
   * the corresponding feature value.
@@ -485,16 +488,16 @@ public:
     cout << "'" << iter->first << "': ";
     cout << to_string(iter->second) << '}' << endl;
   };
-  
+
   /*
   * Pretty-prints the features identifiers, values, and description. 
   */
   void print_pp() {
     string k;
-    
+
     cout << setw(15) << "IDENTIFIER"
          << setw(20) << "VALUE"
-	 << setw(40) << "DESCRIPTION" << endl;
+         << setw(40) << "DESCRIPTION" << endl;
     cout << "======================================================";
     cout << "=====================================================\n";
     cout << left;
@@ -505,14 +508,14 @@ public:
       cout << setw(65) << description[k] << endl;
     }
   };
-  
+
 private:
-  
+
   static int var_id;
   static int con_id;
   static map<string, int> globals;
   static map<string, string> description;
-  
+
   double sum_ari_cons;
   double sum_dom_vars2;
   double sum_deg_vars2;
@@ -520,7 +523,7 @@ private:
   double sum_dom_cons2;
   double sum_ari_cons2;
   double sum_domdeg_cons2;
-  
+
   map<int, set<int> > cons_to_vars;
   map<double, double> count_dom_vars;
   map<double, double> count_deg_vars;
@@ -561,7 +564,7 @@ private:
     features["v_ent_deg_vars"]     = 0.0;
     features["v_ent_domdeg_vars"]  = 0.0;
   }
-  
+
   // Initialize domains (18 features).
   void
   init_doms() {
@@ -584,7 +587,7 @@ private:
     features["d_ratio_int_cons"]   = 0.0;
     features["d_ratio_set_cons"]   = 0.0;
   }
-  
+
   // Initialize constraints (27).
   void
   init_cons() {  
@@ -616,7 +619,7 @@ private:
     features["c_ent_deg_cons"]     = 0.0;
     features["c_ent_domdeg_cons"]  = 0.0;
   }
-  
+
   // Initialize global constraints (4 features).
   void
   init_globals() {
@@ -625,7 +628,7 @@ private:
     features["gc_diff_globs"]  = 0.0;
     features["gc_ratio_diff"]  = 0.0;
   }
-  
+
   // Initialize solving (11 features).
   void
   init_solve() {
@@ -641,7 +644,7 @@ private:
     features["s_indomain_max"] = 0.0;
     features["s_other_val"]    = 0.0;    
   }
-  
+
   // Initialize objective function (8 features).
   void
   init_objfn() {
@@ -653,15 +656,13 @@ private:
     features["o_deg_avg"]  = 0.0;
     features["o_deg_std"]  = 0.0;
     features["o_deg_cons"] = 0.0;
-  } 
-  
+  }
+
   // Auxiliary function for computing variable degrees and constraint domains.
   void
   update_cons(const var_info& vi, set<int>& con_vars, double& dom) {
     std::pair<set<int>::const_iterator, bool> p;
     int var_id;
-    if (!vi.name)
-      return;
     string var_name;
     if (vi.alias) {
       var_id = vi.alias->id;
@@ -672,14 +673,14 @@ private:
         return;
       else {
         var_id = vi.id;
-	    var_name = vi.name;
+        var_name = vi.name;
       }
     p = con_vars.insert(var_id);
     if (p.second) {
       ++vars_to_info[var_name].degree;
       dom += log2(vars_to_info[var_name].dom_size);
-    }  
-  } 
+    }
+  }
 
   // Auxiliary function for computing variables statistics.
   void
@@ -695,7 +696,7 @@ private:
     features["v_ratio_vars"]   = n / c;
     features["c_ratio_cons"]   = c / n;
     features["gc_ratio_globs"] = g / c;
-    
+
     features["d_ratio_bool_vars"]  = features["d_bool_vars"]  / n;
     features["d_ratio_float_vars"] = features["d_float_vars"] / n;
     features["d_ratio_int_vars"]   = features["d_int_vars"]   / n;
@@ -705,68 +706,68 @@ private:
     features["d_ratio_float_cons"] = features["d_float_cons"] / c;
     features["d_ratio_int_cons"]   = features["d_int_cons"]   / c;
     features["d_ratio_set_cons"]   = features["d_set_cons"]   / c;
-    
+
     double m = features["v_sum_dom_vars"] / n;
     features["v_avg_dom_vars"] = m;
     features["v_cv_dom_vars"]  = sqrt((sum_dom_vars2 / n) - m * m) / m;
     double h = 0;
-    for (count_iterator i  = count_dom_vars.begin(); 
-	                i != count_dom_vars.end(); ++i) {
+    for (count_iterator i  = count_dom_vars.begin();
+                        i != count_dom_vars.end(); ++i) {
       double x = i->second;
       h += x * log2(x);
     }
     features["v_ent_dom_vars"] = log2(n) - h / n;
-    
+
     for (vars_iterator iter  = vars_to_info.begin(); 
-	               iter != vars_to_info.end(); iter++)
+                       iter != vars_to_info.end(); iter++)
       if (!iter->second.array) {
-	int deg = iter->second.degree;
-	if (deg < features["v_min_deg_vars"])
-	  features["v_min_deg_vars"] = deg;
-	if (deg > features["v_max_deg_vars"])
-	  features["v_max_deg_vars"] = deg;
-	if (deg != 0) {
-	  features["v_sum_deg_vars"] += deg;
-	  sum_deg_vars2 += deg * deg;
-	  ++count_deg_vars[deg];
-	  features["v_logprod_deg_vars"] += log2(deg);
-	  double domdeg = iter->second.dom_size / deg;
-	  features["v_sum_domdeg_vars"] += domdeg;
-	  sum_domdeg_vars2 += domdeg * domdeg;
-	  if (domdeg < features["v_min_domdeg_vars"])
-	    features["v_min_domdeg_vars"] = domdeg;
-	  if (domdeg > features["v_max_domdeg_vars"])
-	    features["v_max_domdeg_vars"] = domdeg;
-	  ++count_domdeg_vars[floor(domdeg + 0.5)];
-       }
-//        else
-//          if (!iter->second.assigned)
-// 	   std::cerr << "Warning: variable " << iter->second.name
-// 	             << " has degree 0." << endl;
+        int deg = iter->second.degree;
+        if (deg < features["v_min_deg_vars"])
+          features["v_min_deg_vars"] = deg;
+        if (deg > features["v_max_deg_vars"])
+          features["v_max_deg_vars"] = deg;
+        if (deg != 0) {
+          features["v_sum_deg_vars"] += deg;
+          sum_deg_vars2 += deg * deg;
+          ++count_deg_vars[deg];
+          features["v_logprod_deg_vars"] += log2(deg);
+          double domdeg = iter->second.dom_size / deg;
+          features["v_sum_domdeg_vars"] += domdeg;
+          sum_domdeg_vars2 += domdeg * domdeg;
+          if (domdeg < features["v_min_domdeg_vars"])
+            features["v_min_domdeg_vars"] = domdeg;
+          if (domdeg > features["v_max_domdeg_vars"])
+            features["v_max_domdeg_vars"] = domdeg;
+          ++count_domdeg_vars[floor(domdeg + 0.5)];
+        }
+        else
+          if (!iter->second.assigned)
+            std::cerr << "Warning: variable " << iter->second.name
+                      << " has degree 0." << endl;
       }
     m = features["v_sum_deg_vars"] / n;
     features["v_avg_deg_vars"] = m;
     features["v_cv_deg_vars"]  = sqrt((sum_deg_vars2 / n) - m * m) / m;
     h = 0;
     for (count_iterator i  = count_deg_vars.begin(); 
-	                i != count_deg_vars.end(); ++i) {
+                        i != count_deg_vars.end(); ++i) {
       double x = i->second;
       h += x * log2(x);
     }
     features["v_ent_deg_vars"] = log2(n) - h / n;
-    
+
     m = features["v_sum_domdeg_vars"] / n;
     features["v_avg_domdeg_vars"] = m;
     features["v_cv_domdeg_vars"]  = sqrt((sum_domdeg_vars2 / n) - m * m) / m;
     h = 0;
     for (count_iterator i  = count_domdeg_vars.begin(); 
-	                i != count_domdeg_vars.end(); ++i) {
+                        i != count_domdeg_vars.end(); ++i) {
       double x = i->second;
       h += x * log2(x);
     }
     features["v_ent_domdeg_vars"] = log2(n) - h / n;
   }
-  
+
   // Auxiliary function for computing constraints statistics.
   void
   final_update_cons() {
@@ -776,47 +777,54 @@ private:
     features["c_cv_dom_cons"]  = sqrt((sum_dom_cons2 / n) - m * m) / m;
     double h = 0;
     for (count_iterator i  = count_dom_cons.begin();
-	                i != count_dom_cons.end(); ++i) {
+                        i != count_dom_cons.end(); ++i) {
       double x = i->second;
       h += x * log2(x);
     }
     features["c_ent_dom_cons"] = log2(n) - h / n;
-    
+
     m = sum_ari_cons / n;
     features["c_avg_deg_cons"] = m;
     features["c_cv_deg_cons"]  = sqrt((sum_ari_cons2 / n) - m * m) / m;
     h = 0;
     for (count_iterator i  = count_deg_cons.begin(); 
-	                i != count_deg_cons.end(); ++i) {
+                        i != count_deg_cons.end(); ++i) {
       double x = i->second;
       h += x * log2(x);
     }
     features["c_ent_deg_cons"] = log2(n) - h / n;
-    
+
     m = features["c_sum_domdeg_cons"] / n;
     features["c_avg_domdeg_cons"] = m;
     features["c_cv_domdeg_cons"]  = sqrt((sum_domdeg_cons2 / n) - m * m) / m;
     h = 0;
     for (count_iterator i  = count_domdeg_cons.begin();
-	                i != count_domdeg_cons.end(); ++i) {
+                        i != count_domdeg_cons.end(); ++i) {
       double x = i->second;
       h += x * log2(x);
     }
     features["c_ent_domdeg_cons"] = log2(n) - h / n;
   }
-  
+
   // Auxiliary function for computing search statistics.
   void
   update_search(expr_list* e) {
     expr_list::iterator i = e->begin();
+    if ((*i)->type() == ARRAY_EXPR) {
+      expr_list* anns = (*i)->value().list_val;
+      for (expr_list::iterator j = anns->begin(); j != anns->end(); ++j) {
+        update_search(anns);
+      }
+      return;
+    }
     string search = string((*i)->value().string_val);
     if (search == "bool_search")
       ++features["s_bool_search"];
     else
       if (search == "int_search")
-	++features["s_int_search"];
+        ++features["s_int_search"];
       else
-	++features["s_set_search"];
+        ++features["s_set_search"];
     ++i;
     if ((*i)->type() == ARRAY_EXPR) {
       expr_list* el = (*i)->value().list_val;
@@ -832,18 +840,18 @@ private:
       ++features["s_input_order"];
     else
       if (var_choice == "first_fail")
-	++features["s_first_fail"];
+        ++features["s_first_fail"];
       else
-	++features["s_other_var"];
+        ++features["s_other_var"];
     ++i;
     string val_choice = string((*i)->value().string_val);
     if (val_choice == "indomain_min")
       ++features["s_indomain_min"];
     else
       if (val_choice == "indomain_max")
-	++features["s_indomain_max"];
+        ++features["s_indomain_max"];
       else
-	++features["s_other_val"];
+        ++features["s_other_val"];
   }
 
   // Auxiliary function for computing objective function statistics.
@@ -856,18 +864,18 @@ private:
     double avg_deg = features["v_avg_deg_vars"];
     double std_deg = features["v_cv_deg_vars"] * avg_deg;
     double m = features["c_num_cons"];
-    
+
     features["o_dom"] = dom;
     features["o_dom_avg"] = dom / avg_dom;
     features["o_dom_std"] = (dom - avg_dom) / std_dom;
     features["o_dom_deg"] = dom / deg;
-    
+
     features["o_deg"] = deg;
     features["o_deg_avg"] = deg / avg_deg;
     features["o_deg_std"] = (deg - avg_deg) / std_deg;
     features["o_deg_cons"] = deg / m;
   }
-  
+
 };
 
 double static_features::inf = std::numeric_limits<double>::infinity();

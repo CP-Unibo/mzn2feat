@@ -106,7 +106,7 @@ TESTING
 Once successfully installed the tool, it is possible to test the samples 
 included in mzn2feat/test folder. One can do it manually, for instance:
 
-      mzn2feat/test$ mzn2feat -i zebra.mzn -o pp
+      mzn2feat/test/mzn$ mzn2feat -i zebra.mzn -o pp
 
 or, alternatively, is possible to run all the tests of the folder by running:
 

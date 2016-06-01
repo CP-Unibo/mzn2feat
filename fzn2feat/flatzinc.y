@@ -28,7 +28,7 @@
 
 extern "C" {
   int yyparse(void);
-  int yylex(void);  
+  int yylex(void);
   int yywrap(void);
   int yyerror(char*);
 }
@@ -38,12 +38,12 @@ const double MAX_FLOAT_SIZE = static_features::inf;
 const double MAX_SET_SIZE   = static_features::inf;
 
 bool initialized = false;
-array_expr* array_elems;
+expression* array_elems;
 static_features sf;
 
 %}
 
- 
+
 // Possible values for attributed tokens.
 %union {
     const char* string_val;
@@ -94,21 +94,21 @@ static_features sf;
 // but it's better than none.
 // NOTE: Predicates were been removed (Roberto Amadini).
 
-model: 
+model:
   var_decl_items constraint_items model_end
 
-var_decl_items: 
+var_decl_items:
   var_decl_items var_decl_item ';'
   | /* empty */
- 
+
 constraint_items: 
   constraint_items constraint_item ';'
   | /* empty */
- 
-model_end: 
+
+model_end:
   solve_item ';'
-    
-    
+
+
 //---------------------------------------------------------------------------
 // Items
 //---------------------------------------------------------------------------
@@ -168,8 +168,8 @@ array_decl_tail:
     $3->pop_front();
     expr_set es;
     set_expr::list_to_set(*$3, es);
-    $$.anns = new expr_set(es);
-    array_elems = (array_expr*) $5;
+      $$.anns = new expr_set(es);
+    array_elems = $5;
   }
   | VAR non_array_ti_expr_tail ':' ident_anns array_decl_tail2 {
     $$ = $2;
@@ -178,9 +178,9 @@ array_decl_tail:
     expr_set es;
     set_expr::list_to_set(*$4, es);
     $$.anns = new expr_set(es);
-    array_elems = (array_expr*) $5;
+    array_elems = $5;
   }
-  
+
 array_decl_tail2:
   '=' array_literal {
     initialized = true;
@@ -205,7 +205,7 @@ constraint_item:
   CONSTRAINT constraint_elem annotations {
     sf.update_constraint($2, $3);
   }
-  
+
 constraint_elem:
   IDENT '(' exprs ')' {
     $3->push_front(new string_expr($1));
@@ -374,7 +374,7 @@ annotations:
   | {
     $$ = new expr_list();
   }
-  
+
 %%
 
 #include "lex.yy.c"
@@ -382,7 +382,7 @@ annotations:
 char* filename;
 
 int main(int argc, char *argv[]) {
-    
+
   if (argc < 2) {
       fprintf(stderr, "Usage: %s <file.fzn> [output flag]\n", argv[0]);
       exit(1);
@@ -399,13 +399,13 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Features not extracted!");
     return ret;
   }
-  
+
   string output;
   if (argc > 2)
     output = argv[2];
   else
     output = "csv";
-  
+
   sf.final_update();
   sf.print(output);
   return 0;
