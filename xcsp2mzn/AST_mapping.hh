@@ -78,8 +78,6 @@ string manageOperator (const AST & oper) {
 }
 
 
-string manageBoolExpr (const AST & expr);
-
 string manageIntExpr (const AST & expr) {
 	string ret = "";
 	if ( expr.isInteger() )
@@ -92,7 +90,7 @@ string manageIntExpr (const AST & expr) {
         NodeType  oper(aF.getType());
 
         if ( false == isIntegerOp(oper) )
-						throw std::runtime_error("integer operator failure (" + to_string(oper) + ")");
+            throw std::runtime_error("integer operator failure");
 
         switch ( oper ) {
         	case F_ABS:
@@ -172,14 +170,14 @@ string manageIntExpr (const AST & expr) {
 
             case F_IF:
                 ret = "(bool2int(";
-                ret.append( manageBoolExpr(aF.getArg(0)) );
+                ret.append( manageIntExpr(aF.getArg(0)) );
                 ret.append(") * ");
                 ret.append( manageIntExpr(aF.getArg(1)) );
                 ret.append(" + bool2int(not(");
-                ret.append( manageBoolExpr(aF.getArg(0)) );
-                ret.append(")) * ");
+                ret.append( manageIntExpr(aF.getArg(0)) );
+                ret.append(") * ");
                 ret.append( manageIntExpr(aF.getArg(1)) );
-                ret.append(")");
+                ret.append(") * ");
                 break;
 
             default:
@@ -284,9 +282,9 @@ string manageBoolExpr (const AST & expr) {
                 ret.append(")");
                 break;
 
-            case F_NOT:
+            case F_NEG:
                 ret = "not(";
-                ret.append( manageBoolExpr(aF.getArg(0)) );
+                ret.append( manageIntExpr(aF.getArg(0)) );
                 ret.append(")");
                 break;
 
@@ -299,7 +297,7 @@ string manageBoolExpr (const AST & expr) {
                 break;
 
             default:
-               throw std::runtime_error("unexpected operator dealing with boolean expression (" + to_string(oper) + ")");
+               throw std::runtime_error("unexpected operator dealing with boolean expression");
                break;
           }
        }
