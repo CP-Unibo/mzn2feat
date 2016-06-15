@@ -1,4 +1,4 @@
-mzn2feat 1.1.2
+mzn2feat 1.2.1
 ==============
 
 The features extractor tool mzn2feat was mainly developed by Roberto 
@@ -13,7 +13,7 @@ designed to be more portable, light, flexible, and independent from the
 particular machine on which it is run as well as from the specific global 
 redefinitions of a given solver. This version of mzn2feat was used in [4][5][6].
 
-Version 1.1.2 adds to version 1.1 the global constraints of MiniZinc 2.0 not 
+Version 1.2.x adds to version 1.1 the global constraints of MiniZinc 2.0 not 
 implemented in MiniZinc 1.6. Environment variables no longer needed.
 
 
