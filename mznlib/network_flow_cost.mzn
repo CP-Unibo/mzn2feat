@@ -1,1 +1,1 @@
-predicate network_flow_cost(array[int,1..2] of int: arc, array[int] of int: balance, array[int] of int: weight, array[int] of var int: flow, var int: cost);
+predicate network_flow_cost(array[int, int] of int, array[int] of int, array[int] of int, array[int] of var int, var int)
