@@ -88,7 +88,6 @@ include "maximum.mzn";
 include "member.mzn";
 include "minimum.mzn";
 include "network_flow.mzn";
-include "network_flow_cost.mzn";
 include "nvalue.mzn";
 include "nvalue_fn.mzn";
 include "partition_set.mzn";
