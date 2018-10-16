@@ -1,1 +1,0 @@
-predicate network_flow_cost(array[int, int] of int, array[int] of int, array[int] of int, array[int] of var int, var int);

@@ -13,9 +13,6 @@ designed to be more portable, light, flexible, and independent from the
 particular machine on which it is run as well as from the specific global 
 redefinitions of a given solver. This version of mzn2feat was used in [4][5][6].
 
-Version 1.2.x adds to version 1.1 the global constraints of MiniZinc 2.0 not 
-implemented in MiniZinc 1.6. Environment variables no longer needed.
-
 
 CONTENTS
 ========
@@ -61,6 +58,13 @@ portable on other platforms.
 		
 INSTALLATION
 ============
+
+The mzn2feat can be called via http post requests by using the Docker image of
+the portfolio solver [sunnny-cp](https://github.com/CP-Unibo/sunny-cp). Please
+see [sunnny-cp](https://github.com/CP-Unibo/sunny-cp) for more details on the
+installation of the solver.
+
+To install mzn2feat manually instead:
 
 1. Move into the mzn2feat folder and run the installer:
 

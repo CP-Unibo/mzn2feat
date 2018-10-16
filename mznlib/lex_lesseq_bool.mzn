@@ -1,52 +1,38 @@
-%-----------------------------------------------------------------------------%
-% Requires that the array 'x' is lexicographically less than or equal to
-% array 'y'.  Compares them from first to last element, regardless of indices
-%-----------------------------------------------------------------------------%
+%
+%  Main authors:
+%     Guido Tack <tack@gecode.org>
+%
+%  Copyright:
+%     Guido Tack, 2007
+%
+%  This file is part of Gecode, the generic constraint
+%  development environment:
+%     http://www.gecode.org
+%
+%  Permission is hereby granted, free of charge, to any person obtaining
+%  a copy of this software and associated documentation files (the
+%  "Software"), to deal in the Software without restriction, including
+%  without limitation the rights to use, copy, modify, merge, publish,
+%  distribute, sublicense, and/or sell copies of the Software, and to
+%  permit persons to whom the Software is furnished to do so, subject to
+%  the following conditions:
+%
+%  The above copyright notice and this permission notice shall be
+%  included in all copies or substantial portions of the Software.
+%
+%  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+%  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+%  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+%  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+%  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+%  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+%  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+%
+%
+
+predicate array_bool_lq(array[int] of var bool: x,
+                        array[int] of var bool: y);
 
 predicate lex_lesseq_bool(array[int] of var bool: x,
                           array[int] of var bool: y) =
-    let { int: lx = min(index_set(x)),
-          int: ux = max(index_set(x)),
-          int: ly = min(index_set(y)),
-          int: uy = max(index_set(y)),
-          int: size = max(ux - lx, uy - ly),
-          array[0..size] of var bool: b }
-          % b[i] is true if the lexicographical order holds from position i on.
-    in
-    b[0]
-    /\
-    forall(i in 0..size) (
-        b[i] = ( x[lx + i] <= y[ly + i]
-                 /\
-                 if i = size then true
-                 else x[lx + i] <  y[ly + i] \/ b[i+1] endif
-               )
-    );
-
-predicate lex_lesseq_bool_reif(array[int] of var bool: x,
-                               array[int] of var bool: y,
-                               var bool: c) =
-    let { int: lx = min(index_set(x)),
-          int: ux = max(index_set(x)),
-          int: ly = min(index_set(y)),
-          int: uy = max(index_set(y)),
-          int: size = max(ux - lx, uy - ly),
-          array[0..size] of var bool: b }
-          % b[i] is true if the lexicographical order holds from position i on.
-    in
-    (c <-> b[0])
-    /\
-    forall(i in 0..size) (
-        b[i] = ( x[lx + i] <= y[ly + i]
-                 /\
-                 if i = size then true
-                 else x[lx + i] <  y[ly + i] \/ b[i+1] endif
-               )
-    );
-
-
-predicate lex_leq_bool(array[int] of var bool: x,
-                       array[int] of var bool: y) =
-          lex_lesseq(x, y);
-
-%-----------------------------------------------------------------------------%
+    array_bool_lq(x,y);
