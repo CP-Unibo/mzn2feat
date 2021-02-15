@@ -30,4 +30,7 @@
 %
 %
 
-predicate nvalue(var int: n, array[int] of var int: x);
+predicate nvalue(var int: n, array[$X] of var int: x);
+
+function var int: nvalue(array[$X] of var int: x);
+
