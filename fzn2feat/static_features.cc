@@ -885,25 +885,11 @@ int static_features::con_id = 0;
 map<string, int>
 init_glob_names() {
   map<string, int> globs;
-  int n = 61;
   string names[] = {
-    "alldifferent_except_0", "atmost", "count_neq", "global_cardinality", 
-    "maximum", "subcircuit", "all_different", "bin_backing_load", 
-    "cumulative", "increasing", "member", "sum", "alldifferent", 
-    "bin_packing_capa", "decreasing", "int_set_channel", "minimum", 
-    "sum_pred", "all_disjoint", "bin_packing", "diffn", "inverse", "nvalue", 
-    "table", "all_equal", "circuit", "disjoint", "inverse_set", 
-    "partition_set", "value_precede_chain", "among", "count_eq", "distribute", 
-    "lex2", "range", "value_precede", "at_least", "count_geq", "element", 
-    "lex_greatereq", "regular", "atleast", "count_gt", "exactly", 
-    "lex_greater", "roots", "at_most1", "count_leq", 
-    "global_cardinality_closed", "lex_lesseq", "sliding_sum", "atmost1", 
-    "count_lt", "global_cardinality_low_up_closed", "lex_less", "sort", 
-    "at_most", "count", "global_cardinality_low_up", "link_set_to_booleans", 
-    "strict_lex2"
+"fzn_alldifferent_except_0", "fzn_all_different_int", "fzn_all_equal_int", "fzn_among", "fzn_arg_max_bool", "fzn_arg_max_int", "fzn_arg_min_bool", "fzn_arg_min_int", "fzn_at_least_int", "fzn_at_least_set", "fzn_at_most_int", "fzn_at_most_set", "fzn_bin_packing", "fzn_bin_packing_capa", "fzn_bin_packing_load", "fzn_circuit", "fzn_count_eq", "fzn_count_eq_reif", "fzn_cumulative", "fzn_cumulative_opt", "fzn_decreasing_bool", "fzn_decreasing_int", "fzn_diffn", "fzn_disjoint", "fzn_disjunctive_strict", "fzn_disjunctive_strict_opt", "fzn_exactly_set", "fzn_global_cardinality", "fzn_global_cardinality_closed", "fzn_global_cardinality_low_up", "fzn_global_cardinality_low_up_closed", "fzn_increasing_bool", "fzn_increasing_int", "fzn_int_set_channel", "fzn_inverse", "fzn_inverse_set", "fzn_lex_less_bool", "fzn_lex_lesseq_bool", "fzn_lex_lesseq_int", "fzn_lex_less_int", "fzn_link_set_to_booleans", "fzn_member_bool", "fzn_member_bool_reif", "fzn_member_int", "fzn_member_int_reif", "fzn_nvalue", "fzn_partition_set", "fzn_range", "fzn_regular", "fzn_roots", "fzn_sort", "fzn_sum_pred", "fzn_sum_set", "fzn_table_bool", "fzn_table_bool_reif", "fzn_table_int", "fzn_table_int_reif", "fzn_value_precede_int", "fzn_value_precede_set", "gecode_among_seq_bool", "gecode_among_seq_int", "gecode_array_set_element_intersect", "gecode_array_set_element_intersect_in", "gecode_array_set_element_partition", "gecode_array_set_element_union", "gecode_bin_packing_load", "gecode_bool_element", "gecode_bool_element2d", "gecode_circuit", "gecode_circuit_cost", "gecode_circuit_cost_array", "gecode_cumulatives", "gecode_global_cardinality", "gecode_global_cardinality_closed", "gecode_int_element", "gecode_int_element2d", "gecode_int_pow", "gecode_int_set_channel", "gecode_inverse_set", "gecode_link_set_to_booleans", "gecode_maximum_arg_bool_offset", "gecode_maximum_arg_int_offset", "gecode_member_bool_reif", "gecode_member_int_reif", "gecode_minimum_arg_bool_offset", "gecode_minimum_arg_int_offset", "gecode_nooverlap", "gecode_precede", "gecode_precede_set", "gecode_range", "gecode_regular", "gecode_schedule_cumulative_optional", "gecode_schedule_unary", "gecode_schedule_unary_optional", "gecode_set_weights", "gecode_table_bool", "gecode_table_bool_imp", "gecode_table_bool_reif", "gecode_table_int", "gecode_table_int_imp", "gecode_table_int_reif"
   };
-  for (int i = 0; i < n; ++i)
-    globs[names[i]] = 0;
+  for (auto n : names)
+    globs[n] = 0;
   return globs;
 }
 map<string, int> static_features::globals(init_glob_names());

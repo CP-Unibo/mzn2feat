@@ -99,8 +99,8 @@ def mzn2fzn(mzn_file, dzn_file):
     """
     global KEEP, MZNLIB, TMP_FZN, TMP_MZN
     TMP_FZN = TMP_DIR + '/' + gethostname() + '_' + str(os.getpid()) + '.fzn'
-    cmd = 'minizinc -c --solver org.minizinc.mzn-fzn --no-output-ozn -I ' \
-        + MZNLIB + ' ' + mzn_file + ' ' + dzn_file + ' -o ' + TMP_FZN
+    cmd = 'minizinc -c --no-output-ozn ' + mzn_file + ' ' + dzn_file + ' -o ' + TMP_FZN
+#    print(cmd)
     proc = Popen(cmd.split())
     PID = proc.pid
     proc.communicate()
