@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 mzn2feat - a features extractor for (not only) MiniZinc models.
 
