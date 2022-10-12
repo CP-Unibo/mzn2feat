@@ -820,11 +820,12 @@ private:
     string search = string((*i)->value().string_val);
     if (search == "bool_search")
       ++features["s_bool_search"];
+    else if (search == "int_search")
+      ++features["s_int_search"];
+    else if (search == "set_search")
+      ++features["s_set_search"];
     else
-      if (search == "int_search")
-        ++features["s_int_search"];
-      else
-        ++features["s_set_search"];
+      return;
     ++i;
     if ((*i)->type() == ARRAY_EXPR) {
       expr_list* el = (*i)->value().list_val;
@@ -838,20 +839,18 @@ private:
     string var_choice = string((*i)->value().string_val);
     if (var_choice == "input_order")
       ++features["s_input_order"];
+    else if (var_choice == "first_fail")
+      ++features["s_first_fail"];
     else
-      if (var_choice == "first_fail")
-        ++features["s_first_fail"];
-      else
-        ++features["s_other_var"];
+      ++features["s_other_var"];
     ++i;
     string val_choice = string((*i)->value().string_val);
     if (val_choice == "indomain_min")
       ++features["s_indomain_min"];
+    else if (val_choice == "indomain_max")
+      ++features["s_indomain_max"];
     else
-      if (val_choice == "indomain_max")
-        ++features["s_indomain_max"];
-      else
-        ++features["s_other_val"];
+      ++features["s_other_val"];
   }
 
   // Auxiliary function for computing objective function statistics.
