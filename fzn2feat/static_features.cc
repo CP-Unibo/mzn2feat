@@ -872,12 +872,12 @@ private:
 
     features["o_dom"] = dom;
     features["o_dom_avg"] = dom / avg_dom;
-    features["o_dom_std"] = (dom - avg_dom) / std_dom;
+    features["o_dom_std"] = std_dom == 0 ? 0 : (dom - avg_dom) / std_dom;
     features["o_dom_deg"] = dom / deg;
 
     features["o_deg"] = deg;
     features["o_deg_avg"] = deg / avg_deg;
-    features["o_deg_std"] = (deg - avg_deg) / std_deg;
+    features["o_deg_std"] = std_deg == 0 ? 0 : (deg - avg_deg) / std_deg;
     features["o_deg_cons"] = deg / m;
   }
 
