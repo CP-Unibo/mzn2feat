@@ -692,7 +692,7 @@ private:
     (features["v_num_aliases"]  + features["v_num_consts"]) / n; 
     double c = features["c_num_cons"];
     double g = features["gc_global_cons"];
-    features["gc_ratio_diff"] = features["gc_diff_globs"] / g;
+    features["gc_ratio_diff"] = g == 0 ? 0 : features["gc_diff_globs"] / g;
     features["v_ratio_vars"]   = n / c;
     features["c_ratio_cons"]   = c / n;
     features["gc_ratio_globs"] = g / c;
