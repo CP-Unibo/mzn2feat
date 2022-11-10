@@ -709,7 +709,8 @@ private:
 
     double m = features["v_sum_dom_vars"] / n;
     features["v_avg_dom_vars"] = m;
-    features["v_cv_dom_vars"]  = sqrt((sum_dom_vars2 / n) - m * m) / m;
+    int q = sum_dom_vars2 / n - m * m;
+    features["v_cv_dom_vars"]  = q < 0 ? 0 : sqrt(q) / m;
     double h = 0;
     for (count_iterator i  = count_dom_vars.begin();
                         i != count_dom_vars.end(); ++i) {
@@ -747,7 +748,8 @@ private:
       }
     m = features["v_sum_deg_vars"] / n;
     features["v_avg_deg_vars"] = m;
-    features["v_cv_deg_vars"]  = sqrt((sum_deg_vars2 / n) - m * m) / m;
+    q = sum_deg_vars2 / n - m * m;
+    features["v_cv_deg_vars"]  = q < 0 ? 0 : sqrt(q) / m;
     h = 0;
     for (count_iterator i  = count_deg_vars.begin(); 
                         i != count_deg_vars.end(); ++i) {
@@ -758,7 +760,8 @@ private:
 
     m = features["v_sum_domdeg_vars"] / n;
     features["v_avg_domdeg_vars"] = m;
-    features["v_cv_domdeg_vars"]  = sqrt((sum_domdeg_vars2 / n) - m * m) / m;
+    q = sum_domdeg_vars2 / n - m * m;
+    features["v_cv_domdeg_vars"]  = q < 0 ? 0 : sqrt(q) / m;
     h = 0;
     for (count_iterator i  = count_domdeg_vars.begin(); 
                         i != count_domdeg_vars.end(); ++i) {
@@ -774,7 +777,8 @@ private:
     double n = features["c_num_cons"];
     double m = features["c_sum_dom_cons"] / n;
     features["c_avg_dom_cons"] = m;
-    features["c_cv_dom_cons"]  = sqrt((sum_dom_cons2 / n) - m * m) / m;
+    int q = sum_dom_cons2 / n - m * m;
+    features["c_cv_dom_cons"]  = q < 0 ? 0 : sqrt(q) / m;
     double h = 0;
     for (count_iterator i  = count_dom_cons.begin();
                         i != count_dom_cons.end(); ++i) {
@@ -785,7 +789,8 @@ private:
 
     m = sum_ari_cons / n;
     features["c_avg_deg_cons"] = m;
-    features["c_cv_deg_cons"]  = sqrt((sum_ari_cons2 / n) - m * m) / m;
+    q = sum_ari_cons2 / n - m * m;
+    features["c_cv_deg_cons"]  = q < 0 ? 0 : sqrt(q) / m;
     h = 0;
     for (count_iterator i  = count_deg_cons.begin(); 
                         i != count_deg_cons.end(); ++i) {
@@ -796,7 +801,8 @@ private:
 
     m = features["c_sum_domdeg_cons"] / n;
     features["c_avg_domdeg_cons"] = m;
-    features["c_cv_domdeg_cons"]  = sqrt((sum_domdeg_cons2 / n) - m * m) / m;
+    q = sum_domdeg_cons2 / n - m * m;
+    features["c_cv_domdeg_cons"]  = q < 0 ? 0 : sqrt(q) / m;
     h = 0;
     for (count_iterator i  = count_domdeg_cons.begin();
                         i != count_domdeg_cons.end(); ++i) {
@@ -906,7 +912,7 @@ init_descr() {
   descr["c_bounds_z"] = 
     "No of constraints using 'boundsZ' or 'bounds' annotation";
   descr["c_cv_deg_cons"] = "Coefficient of Variation of constraints degree";
-  descr["c_cv_dom_cons"] = "Coefficient of Variation of constraints degree";
+  descr["c_cv_dom_cons"] = "Coefficient of Variation of constraints domain";
   descr["c_cv_domdeg_cons"] = 
     "Coefficient of Variation of the ratio constraints domain/degree";
   descr["c_domain"] = "No of constraints using 'domain' annotation";
