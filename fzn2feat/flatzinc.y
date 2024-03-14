@@ -384,7 +384,13 @@ char* filename;
 int main(int argc, char *argv[]) {
 
   if (argc < 2) {
-      fprintf(stderr, "Usage: %s <file.fzn> [output flag]\n", argv[0]);
+      const char* out_str = "Usage: %s <file.fzn> [output flag]\n"
+      "Available output flags:\n" 
+      "dict\tprint a python-like dictionary\n" 
+      "pp\tpretty print\n"
+      "json\tprint a json-like formatted output\n" 
+      "csv\tprint a csv-like formatted output (default)\n";
+      fprintf(stderr, out_str, argv[0]);
       exit(1);
   }
 
