@@ -455,6 +455,9 @@ public:
     else
       if (output == "pp")
         print_pp();
+    else
+     if (output == "json")
+        print_json();
       else
         print_csv();
   }
@@ -486,6 +489,23 @@ public:
       cout << to_string(iter->second) << ", ";
     }
     cout << "'" << iter->first << "': ";
+    cout << to_string(iter->second) << '}' << endl;
+  };
+
+  /*
+  * Prints a json structure which associates to each identifier 
+  * the corresponding feature value.
+  */
+  void print_json() {
+    int n = features.size();
+    int i = 1;
+    feat_iterator iter = features.begin();
+    cout << "{";
+    for (; iter != features.end() && i < n; ++iter, ++i) { 
+      cout << "\"" << iter->first << "\": ";
+      cout << to_string(iter->second) << ", ";
+    }
+    cout << "\"" << iter->first << "\": ";
     cout << to_string(iter->second) << '}' << endl;
   };
 
